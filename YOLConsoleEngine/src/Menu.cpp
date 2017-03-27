@@ -62,7 +62,7 @@ namespace YOLConsoleEngine
 
 		//Change file location
 		if (YOL_ENGINE_DEBUG)
-			location = __Location(L"EngineCoreRaw/" + std::wstring(loc.filePath, 11, loc.filePath.size() - 14) + L"txt");
+			location = __Location("EngineCoreRaw/" + std::string(loc.filePath, 11, loc.filePath.size() - 14) + "txt");
 
 		//Open menu file and get all bytes
 		std::ifstream menuFileIn(location.filePath, std::ios::binary);
@@ -142,11 +142,12 @@ namespace YOLConsoleEngine
 		}
 
 		//Obfuscate menu file in the EngineCore directory
-		std::ofstream menuFileOut(loc.path + L"/" + loc.fileName + L".ytf", std::ios::binary);
+		std::ofstream menuFileOut(loc.path + "/" + loc.fileName + ".ytf", std::ios::binary);
 		if (menuFileOut.fail())
 			return FILE_STREAM_ERROR;
 
-		WriteFileBytes(menuFileOut,ObfuscateBytes(menuFileBytes, project->GetProjectKey()));
+		menuFileBytes = ObfuscateBytes(menuFileBytes, project->GetProjectKey());
+		WriteFileBytes(menuFileOut,menuFileBytes);
 
 		//Do not allow menus with no options
 		if (item.size() < 1)

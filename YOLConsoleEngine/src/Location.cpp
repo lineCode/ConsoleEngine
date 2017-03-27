@@ -27,7 +27,7 @@ namespace YOLConsoleEngine
 	}
 
 	//Gathers information about the file and stores it
-	__Location::__Location(const std::wstring & filepath)
+	__Location::__Location(const std::string & filepath)
 	{
 		Init();
 
@@ -36,13 +36,13 @@ namespace YOLConsoleEngine
 		if (!filepath.empty())
 		{
 			//TODO meh
-			fileName = filepath.substr(filepath.find_last_of(L"/\\") + 1);
+			fileName = filepath.substr(filepath.find_last_of("/\\") + 1);
 			fileName= fileName.substr(0, fileName.find_last_of(L'.'));
 
 
 			filePath = filepath;
 			filePathFull = GetFilePath(filepath);
-			path = filePath.substr(0, filePath.find_last_of(L"\\/"));
+			path = filePath.substr(0, filePath.find_last_of("\\/"));
 			
 			//Redo manually.
 			//File name = from last / (or \\) to last .
@@ -58,10 +58,10 @@ namespace YOLConsoleEngine
 	//Initializes all variables
 	void __Location::Init()
 	{
-		fileExt = std::wstring();
-		fileName = std::wstring();
-		filePath = std::wstring();
-		filePathFull = std::wstring();
-		path = std::wstring();
+		fileExt = std::string();
+		fileName = std::string();
+		filePath = std::string();
+		filePathFull = std::string();
+		path = std::string();
 	}
 }

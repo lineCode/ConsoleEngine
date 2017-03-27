@@ -28,18 +28,15 @@ Since there is no actual docs right now I'm going to write very important engine
 #define YOL_CONSOLE_ENGINE_MAIN_H
 
 //Regulation defines for compiling and using YOLConsoleEngine as a DYNAMIC library
-#ifdef YOL_ENGINE_EXPORTS
-	#define YOL_ENGINE_API __declspec(dllexport)
+#ifdef _WIN32
+	#ifdef YOL_ENGINE_EXPORTS
+		#define YOL_ENGINE_API extern "C" __declspec(dllexport)
+	#else
+		#define YOL_ENGINE_API extern "C" __declspec(dllimport)
+	#endif
 #else
-	#define YOL_ENGINE_API __declspec(dllimport)
+	#define YOL_ENGINE_API 
 #endif
-//If you want to link YOLConsoleEngine statically, you'll have to
-//1. Make an empty define for YOL_ENGINE_API
-//2. Set to compile this project as *.lib
-//2.1. Project properties -> General -> Target Extension -> ".lib"
-//2.2. Project properties -> General -> Configuration type -> Static library (.lib)
-//3. Remove YOL_ENGINE_EXPORTS compiler flag in Project properties -> C/C++ -> Command Line -> Additional Options
-//4. Remove any references to DLL files in your parent projects
 
 //Engine configurations
 //
@@ -55,26 +52,39 @@ Since there is no actual docs right now I'm going to write very important engine
 #define YOL_ENGINE_DEBUG true
 
 
-
 //System includes
-#include <io.h>			//UTF8 console output support
-#include <fcntl.h>		//UTF8 console output support
-#include <iostream>		//Console output streams
-#include <string>		//String types
-#include <Windows.h>	//Console window looks manipulations and filesystem manipulations
-#include <fstream>		//File I/O
-#include <sstream>		//Stream operations
-#include <sys/stat.h>	//Filesystem manipulations
-#include <vector>		//Dynamic arrays (Kappa)
-#include <random>		//mt19937 PRNG
-#include <memory>
+#ifdef __linux__
+	#include <signal.h>					//Handles different terminal signals
+	#include <termios.h>				//Provides replacement for _getch();
+	#include <unistd.h>					//Provides replacement for _getch();
+	
+	//Linux systems require this defines to overwrite many of Windows' behaviours
+	#define VK_TAB 0x09
+	#define VK_RETURN 0x0D
+	#define VK_BACK 0x7F
+	#define OutputDebugStringW(a) {}
+	#define CreateDirectory(name, value) mkdir(name, ACCESSPERMS)
+#else
+	#include <io.h>							//UTF8 console output support
+	#include <Windows.h>				//Lots of good stuff
+#endif
+
+#include <fcntl.h>						//UTF8 console output support
+#include <iostream>						//Console output streams
+#include <string>							//String types
+#include <fstream>						//File I/O
+#include <sstream>						//Stream operations
+#include <sys/stat.h> 				//Filesystem manipulations
+#include <vector>							//Dynamic arrays 
+#include <random>							//mt19937 PRNG
+#include <memory>							//Smart pointers
 
 //Engine includes
-#include "YOLF.h"				//Core functions used in the YOLConsoleEngine
-#include "BasicTypes.h"			//Basic types and manipulations with them (__Size2, __Vec2, __EngineErrors)
-#include "Location.h"			//More convient way to store data of file location in the filesystem
-#include "ProjectSettings.h"	//Default settings for the Project class
-#include "Project.h"			//Project object for controlling various project settings
+#include "YOLF.h"             //Core functions used in the YOLConsoleEngine
+#include "BasicTypes.h"       //Basic types and manipulations with them (__Size2, __Vec2, __EngineErrors)
+#include "Location.h"         //More convient way to store data of file location in the filesystem
+#include "ProjectSettings.h"  //Default settings for the Project class
+#include "Project.h"          //Project object for controlling various project settings
 #include "Menu.h"
 #include "Sprite.h"
 #include "Form.h"
@@ -82,6 +92,5 @@ Since there is no actual docs right now I'm going to write very important engine
 #include "InputText.h"
 #include "InputNumber.h"
 #include "InputButton.h"
-
 
 #endif

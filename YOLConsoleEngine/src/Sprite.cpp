@@ -1,4 +1,4 @@
-﻿/* Sprite.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+﻿/* Sprite.cpp - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
 TODO header's header (sprite description lmao)
@@ -11,20 +11,19 @@ SPRITE BINARY FILE FORMAT
 
 Each sprite pixel is usually 3 bytes:
 --First byte - two colors combined such as: byte = firstColor*16+secondColor
-Can be easily retrieved as firstColor(byte/16), secondColor(byte%16)
+	Can be easily retrieved as firstColor(byte/16), secondColor(byte%16)
 
 --Second and third bytes represent UTF16 with big endian encoding 2-byte symbol (wchar_t), such as:
-symbolVal = thirdByte * 256 + fourthByte;
+	symbolVal = thirdByte * 256 + fourthByte;
 
 NOTE: Pixel considered empty or transparent when either of two colors is equal to 0xFF (cTransparent)
-Empty pixels take up only one byte and stored as 0x10 value (thus 2 bytes for symbol are just ignored)
+	Empty pixels take up only one byte and stored as 0x10 value (thus 2 bytes for symbol are just ignored)
 
 LICENSE
 This software is dual-licensed to the public domain and under the following
 license: you are granted a perpetual, irrevocable license to copy, modify,
 publish, and distribute this file as you see fit.
 */
-
 
 //Global include for all YOLConsoleEngine modules
 #include "../include/YOLConsoleEngineMain.h"
@@ -129,7 +128,7 @@ namespace YOLConsoleEngine
 
 		//Change file location
 		if (YOL_ENGINE_DEBUG)
-			location = __Location(L"EngineCoreRaw/" + std::wstring(loc.filePath, 11, loc.filePath.size() - 11));
+			location = __Location("EngineCoreRaw/" + std::string(loc.filePath, 11, loc.filePath.size() - 11));
 
 		//Open menu file and get all bytes
 		std::ifstream spriteFileIn(location.filePath, std::ios::binary);
@@ -147,7 +146,7 @@ namespace YOLConsoleEngine
 		size.width = spriteFileBytes[0];
 		size.height = spriteFileBytes[1];
 
-		name = loc.fileName;
+		name = std::wstring(loc.fileName.begin(), loc.fileName.end());
 
 		//Ignore empty file
 		if (size.width != 0 && size.height != 0)
@@ -177,11 +176,12 @@ namespace YOLConsoleEngine
 		}
 
 		//Obfuscate menu file in the EngineCore directory
-		std::ofstream spriteFileOut(loc.path + L"/" + loc.fileName + L".ytf", std::ios::binary);
+		std::ofstream spriteFileOut(loc.path + "/" + loc.fileName + ".ytf", std::ios::binary);
 		if (spriteFileOut.fail())
 			return FILE_STREAM_ERROR;
 
-		WriteFileBytes(spriteFileOut, ObfuscateBytes(spriteFileBytes, project->GetProjectKey()));
+		spriteFileBytes = ObfuscateBytes(spriteFileBytes, project->GetProjectKey());
+		WriteFileBytes(spriteFileOut, spriteFileBytes);
 
 		return SUCCESS;
 	}

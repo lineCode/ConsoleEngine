@@ -30,25 +30,25 @@ namespace YOLConsoleEngine
 		__Location();
 
 		//Gathers information about the file and stores it
-		__Location(const std::wstring & filepath);
+		__Location(const std::string & filepath);
 
 		~__Location();
 
 
 		//File extension
-		std::wstring fileExt;
+		std::string fileExt;
 
 		//File name
-		std::wstring fileName;
+		std::string fileName;
 
 		//Relative file path
-		std::wstring filePath;
+		std::string filePath;
 
 		//Full file path
-		std::wstring filePathFull;
+		std::string filePathFull;
 
 		//Only path to file, no ext or name
-		std::wstring path;
+		std::string path;
 				
 	private:
 		//Initializes all variables

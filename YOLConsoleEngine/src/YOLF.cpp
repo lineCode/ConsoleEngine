@@ -45,8 +45,8 @@ namespace YOLConsoleEngine
 	void WriteFileBytes(std::ofstream & outputFile, std::vector<unsigned char>& inputBytes)
 	{
 		outputFile.seekp(0);
-		for each (unsigned char n in inputBytes)
-			outputFile.put(n);
+		for(int i = 0; i < inputBytes.size(); i++)
+			outputFile.put(inputBytes[i]);
 	}
 
 	//Converts a vector of bytes to the wistringstream
@@ -187,57 +187,111 @@ namespace YOLConsoleEngine
 	//Sets a color of the console (only for the symbols that printed)
 	void SetColor(const __ConsoleColor & text, const __ConsoleColor & background)
 	{
-		//Gets console window handler
-		HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		//Sets console text attributes
-		SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
+		#ifdef _WIN32
+			//Gets console window handler
+			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+			//Sets console text attributes
+			SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
+		#else
+			switch(text)
+			{
+				case cBlack: std::wcout << L"\033[30m"; break;
+				case cBlue: std::wcout << L"\033[34m"; break;
+				case cGreen: std::wcout << L"\033[32m"; break;
+				case cCyan: std::wcout << L"\033[36m"; break;
+				case cRed: std::wcout << L"\033[31m"; break;
+				case cMagenta: std::wcout << L"\033[35m"; break;
+				case cBrown: std::wcout << L"\033[33m"; break;
+				case cLightGray: std::wcout << L"\033[37m"; break;
+				case cDarkGray: std::wcout << L"\033[90m"; break;
+				case cLightBlue: std::wcout << L"\033[94m"; break;
+				case cLightGreen: std::wcout << L"\033[92m"; break;
+				case cLightCyan: std::wcout << L"\033[96m"; break;
+				case cLightRed: std::wcout << L"\033[91m"; break;
+				case cLightMagenta: std::wcout << L"\033[95m"; break;
+				case cYellow: std::wcout << L"\033[93m"; break;
+				case cWhite: std::wcout << L"\033[97m"; break;
+			}
+
+			switch(background)
+			{
+				case cBlack: std::wcout << L"\033[40m"; break;
+				case cBlue: std::wcout << L"\033[44m"; break;
+				case cGreen: std::wcout << L"\033[42m"; break;
+				case cCyan: std::wcout << L"\033[46m"; break;
+				case cRed: std::wcout << L"\033[41m"; break;
+				case cMagenta: std::wcout << L"\033[45m"; break;
+				case cBrown: std::wcout << L"\033[43m"; break;
+				case cLightGray: std::wcout << L"\033[47m"; break;
+				case cDarkGray: std::wcout << L"\033[100m"; break;
+				case cLightBlue: std::wcout << L"\033[104m"; break;
+				case cLightGreen: std::wcout << L"\033[102m"; break;
+				case cLightCyan: std::wcout << L"\033[106m"; break;
+				case cLightRed: std::wcout << L"\033[101m"; break;
+				case cLightMagenta: std::wcout << L"\033[105m"; break;
+				case cYellow: std::wcout << L"\033[103m"; break;
+				case cWhite: std::wcout << L"\033[107m"; break;
+			}
+			
+		#endif
 	}
 
 	//Sets a size of the console window. It is also possible to enable/disable scroll
 	void SetConsoleWindowSize(const unsigned int & width, const unsigned int & height, const bool & isScrollVisible)
 	{
-		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-		CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
-		GetConsoleScreenBufferInfo(h, &bufferInfo);
-		SMALL_RECT& winInfo = bufferInfo.srWindow;
-		COORD windowSize = { winInfo.Right - winInfo.Left + 1, winInfo.Bottom - winInfo.Top + 1 };
+		#ifdef _WIN32
+			HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+			CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+			GetConsoleScreenBufferInfo(h, &bufferInfo);
+			SMALL_RECT& winInfo = bufferInfo.srWindow;
+			COORD windowSize = { winInfo.Right - winInfo.Left + 1, winInfo.Bottom - winInfo.Top + 1 };
 
-		if (windowSize.X > width || windowSize.Y > height)
-		{
-			SMALL_RECT info = {	0, 0, width < windowSize.X ? width - 1 : windowSize.X - 1,
-								height < windowSize.Y ? height - 1 : windowSize.Y - 1 };
+			if (windowSize.X > width || windowSize.Y > height)
+			{
+				SMALL_RECT info = {	0, 0, width < windowSize.X ? width - 1 : windowSize.X - 1,
+									height < windowSize.Y ? height - 1 : windowSize.Y - 1 };
+				SetConsoleWindowInfo(h, TRUE, &info);
+			}
+
+			COORD size = { width, height };
+			if (isScrollVisible)
+				size.Y = 9999;
+
+			SetConsoleScreenBufferSize(h, size);
+			SMALL_RECT info = { 0, 0, width - 1, height - 1 };
 			SetConsoleWindowInfo(h, TRUE, &info);
-		}
-
-		COORD size = { width, height };
-		if (isScrollVisible)
-			size.Y = 9999;
-
-		SetConsoleScreenBufferSize(h, size);
-		SMALL_RECT info = { 0, 0, width - 1, height - 1 };
-		SetConsoleWindowInfo(h, TRUE, &info);
+		#else
+			std::wcout << "\e[8;" << height << ";" << width << "t";
+		#endif
 	}
 
 	//Updates only changed region
 	void GotoXY(const int & x, const int & y)
 	{
-		COORD coord = { x, y };
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+		#ifdef _WIN32
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {x,y});
+		#else
+			std::wcout << "\33[" << y << ";" << x <<"H";
+		#endif
 	}
 
 	//Clears console withoug using system()
 	void ClearConsole()
 	{
-		HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD coord = { 0, 0 };
-		DWORD count;
-		CONSOLE_SCREEN_BUFFER_INFO csbi;
-		if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
-		{
-			FillConsoleOutputCharacter(hStdOut, (TCHAR)32, csbi.dwSize.X * csbi.dwSize.Y, coord, &count);
-			FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, csbi.dwSize.X * csbi.dwSize.Y, coord, &count);
-			SetConsoleCursorPosition(hStdOut, coord);
-		}
+		#ifdef _WIN32
+			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+			COORD coord = { 0, 0 };
+			DWORD count;
+			CONSOLE_SCREEN_BUFFER_INFO csbi;
+			if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
+			{
+				FillConsoleOutputCharacter(hStdOut, (TCHAR)32, csbi.dwSize.X * csbi.dwSize.Y, coord, &count);
+				FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, csbi.dwSize.X * csbi.dwSize.Y, coord, &count);
+				SetConsoleCursorPosition(hStdOut, coord);
+			}
+		#else
+			std::wcout << "\033[H\033[J";
+		#endif
 	}
 
 	//Returns inverted color
@@ -289,34 +343,77 @@ namespace YOLConsoleEngine
 
 	//Check for file's or folder's existance
 	//Returns true if found, else false
-	bool FileExists(const std::wstring & file)
+	bool FileExists(const std::string & file)
 	{
-		struct _stat64i32 buf;
-		return (_wstat(file.c_str(), &buf) == 0);
+		struct stat buf;
+		return (stat(file.c_str(), &buf) == 0);
 	}
 
-	//Gets HWID of the device
-	//returns HWID
-	std::string GetHWID(const bool & putBrackets)
+	//Returns CPU Serial Number
+	std::string GetPSN()
 	{
-		HW_PROFILE_INFOW hwProfileInfo;
+		char * psn;
+		int varEAX, varEBX, varECX, varEDX;
+    char str[9];
+    
+    __asm__ __volatile__ ("cpuid"   : "=a" (varEAX), "=b" (varEBX), "=c" (varECX), "=d" (varEDX) : "a" (1));
+    sprintf(str, "%08X", varEAX); 
+    sprintf(psn, "%C%C%C%C-%C%C%C%C", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+    __asm__ __volatile__ ("cpuid"   : "=a" (varEAX), "=b" (varEBX), "=c" (varECX), "=d" (varEDX) : "a" (3));
+    sprintf(str, "%08X", varEDX);
+    sprintf(psn, "%s-%C%C%C%C-%C%C%C%C", psn, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+    sprintf(str, "%08X", varECX);
+    sprintf(psn, "%s-%C%C%C%C-%C%C%C%C", psn, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 
-		GetCurrentHwProfileW(&hwProfileInfo);
-		std::wstring wc = hwProfileInfo.szHwProfileGuid;
-
-		std::string HWID(wc.begin(),wc.end());
-
-		if (!putBrackets)
-			HWID.assign(HWID, 1, HWID.size() - 2);
-
-		return HWID;
+    return std::string(psn);
 	}
 
-	//Returns full path to the file including name
-	std::wstring GetFilePath(const std::wstring & file)
-	{
-		wchar_t fullPathBuf[MAX_PATH];
-		GetFullPathNameW(file.c_str(), MAX_PATH, fullPathBuf, NULL);
-		return std::wstring(fullPathBuf);
-	}
+	#ifdef _WIN32
+		//Returns HWID of the device
+		std::string GetHWID(const bool & putBrackets)
+		{
+			HW_PROFILE_INFOW hwProfileInfo;
+
+			GetCurrentHwProfileW(&hwProfileInfo);
+			std::wstring wc = hwProfileInfo.szHwProfileGuid;
+
+			std::string HWID(wc.begin(),wc.end());
+
+			if (!putBrackets)
+				HWID.assign(HWID, 1, HWID.size() - 2);
+
+			return HWID;
+		}
+
+		//Returns full path to the file including name
+		std::string GetFilePath(const std::wstring & file)
+		{
+			char fullPathBuf[MAX_PATH];
+			GetFullPathName(file.c_str(), MAX_PATH, fullPathBuf, NULL);
+			return std::string(fullPathBuf);
+		}
+	#else
+		//Returns full path to the file including name
+		std::string GetFilePath(const std::string & file)
+		{ 
+			if(realpath(file.c_str(), NULL) != nullptr)
+				return std::string(realpath(file.c_str(), NULL));
+
+			return std::string(); 
+		}
+
+		//Replacement for windows _getch()
+		int _getch(void)
+		{
+	    struct termios oldattr, newattr;
+	    int ch;
+	    tcgetattr( STDIN_FILENO, &oldattr );
+	    newattr = oldattr;
+	    newattr.c_lflag &= ~( ICANON | ECHO );
+	    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+	    ch = getwchar();
+	    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+	    return ch;
+		}
+	#endif
 }

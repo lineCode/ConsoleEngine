@@ -27,6 +27,9 @@ namespace YOLConsoleEngine
 {
 	//Keeps track if __Project object already exists or not
 	bool __Project::doesExist = false;
+
+	//Reference to self to handle signals statically
+	__Project * __Project::selfReference = nullptr;
 	
 	//Initializes all directories, settings, and other project related stuff
 	__Project::__Project(const __Location & loc, const std::wstring & key)
@@ -48,34 +51,41 @@ namespace YOLConsoleEngine
 			exit(-1);
 		}
 
+		setlocale(LC_ALL, "");
 		projectKey = key;
+		location = loc;
 
-		//Sets keyboard layout to English (for proper _getch() work)
-		PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, INPUTLANGCHANGE_SYSCHARSET, 0x00000409);
+		#ifdef _WIN32
+			//Sets keyboard layout to English (for proper _getch() work)
+			PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, INPUTLANGCHANGE_SYSCHARSET, 0x00000409);
 
-		//Ban windows resizing
-		SetWindowLongPtr(GetConsoleWindow(), GWL_STYLE, GetWindowLong(GetConsoleWindow(), GWL_STYLE)&~WS_SIZEBOX);
+			//Ban windows resizing
+			SetWindowLongPtr(GetConsoleWindow(), GWL_STYLE, GetWindowLong(GetConsoleWindow(), GWL_STYLE)&~WS_SIZEBOX);
 
-		//Sets proper encoding for console output
-		SetConsoleCP(CP_UTF8);
-		SetConsoleOutputCP(CP_UTF8);
-		_setmode(_fileno(stdout), _O_U16TEXT);
+			//Sets proper encoding for console output
+			SetConsoleCP(CP_UTF8);
+			SetConsoleOutputCP(CP_UTF8);
+			_setmode(_fileno(stdout), _O_U16TEXT);
+		#else
+			//Ban window resize on linux
+			signal(SIGWINCH, OnWindowResize);
+		#endif
 
 		//Creates engine directories
 		if (YOL_ENGINE_DEBUG)
 		{
-			CreateDirectoryW(L"EngineCoreRaw", NULL);
-			CreateDirectoryW(L"EngineCoreRaw/UI", NULL);
-			CreateDirectoryW(L"EngineCoreRaw/UI/Forms", NULL);
-			CreateDirectoryW(L"EngineCoreRaw/UI/Menus", NULL);
-			CreateDirectoryW(L"EngineCoreRaw/Sprites", NULL);
+			CreateDirectory("EngineCoreRaw", NULL);
+			CreateDirectory("EngineCoreRaw/UI", NULL);
+			CreateDirectory("EngineCoreRaw/UI/Forms", NULL);
+			CreateDirectory("EngineCoreRaw/UI/Menus", NULL);
+			CreateDirectory("EngineCoreRaw/Sprites", NULL);
 		}
-		CreateDirectoryW(L"EngineCore", NULL);
-		CreateDirectoryW(L"EngineCore/UI", NULL);
-		CreateDirectoryW(L"EngineCore/UI/Forms", NULL);
-		CreateDirectoryW(L"EngineCore/UI/Menus", NULL);
-		CreateDirectoryW(L"EngineCore/Fonts", NULL);
-		CreateDirectoryW(L"EngineCore/Sprites", NULL);
+		CreateDirectory("EngineCore", NULL);
+		CreateDirectory("EngineCore/UI", NULL);
+		CreateDirectory("EngineCore/UI/Forms", NULL);
+		CreateDirectory("EngineCore/UI/Menus", NULL);
+		CreateDirectory("EngineCore/Fonts", NULL);
+		CreateDirectory("EngineCore/Sprites", NULL);
 
 		//Loads project settings from file
 		LoadSettingsFromFile(loc);
@@ -86,13 +96,21 @@ namespace YOLConsoleEngine
 
 	__Project::~__Project() 
 	{
-		//Free font
-		RemoveFontResourceW((L"EngineCore/Fonts/" + defaultSettings.fontName + L".ttf").c_str());
+		#ifdef _WIN32
+			//Free font
+			RemoveFontResourceW((L"EngineCore/Fonts/" + defaultSettings.fontName + L".ttf").c_str());
+		#endif
 	}
 
 	//Initializes all variables
 	void __Project::Init()
 	{
+		//Linux preparations
+		#ifdef __linux__
+			//Reference to self to handle signals statically
+			selfReference = this;
+		#endif
+
 		projectKey = std::wstring();
 		location = __Location();
 		defaultSettings = __ProjectSettings();
@@ -118,7 +136,7 @@ namespace YOLConsoleEngine
 
 		//Change file location
 		if (YOL_ENGINE_DEBUG)
-			location = __Location(L"EngineCoreRaw/" + std::wstring(loc.filePath, 11, loc.filePath.size() - 14) + L"txt");
+			location = __Location("EngineCoreRaw/" + std::string(loc.filePath, 11, loc.filePath.size() - 14) + "txt");
 
 		//Open menu file and get all bytes
 		std::ifstream settingsFileIn(location.filePath, std::ios::binary);
@@ -151,43 +169,44 @@ namespace YOLConsoleEngine
 
 			//Detect what setting is on this line and assign a proper value to the proper variable
 			if (settingName == L"TextColor")
-				defaultSettings.textColor = static_cast<__ConsoleColor>(_wtoi(settingValue.c_str()));
+				defaultSettings.textColor = static_cast<__ConsoleColor>(stoi(settingValue));
 			else if (settingName == L"BackgroundColor")
-				defaultSettings.backgroundColor = static_cast<__ConsoleColor>(_wtoi(settingValue.c_str()));
+				defaultSettings.backgroundColor = static_cast<__ConsoleColor>(stoi(settingValue));
 			else if (settingName == L"GameSpeed")
-				defaultSettings.gameSpeed = _wtoi(settingValue.c_str());
+				defaultSettings.gameSpeed = stoi(settingValue);
 			else if (settingName == L"Width")
-				defaultSettings.size.width = _wtoi(settingValue.c_str());
+				defaultSettings.size.width = stoi(settingValue);
 			else if (settingName == L"Height")
-				defaultSettings.size.height = _wtoi(settingValue.c_str());
+				defaultSettings.size.height = stoi(settingValue);
 			else if (settingName == L"ScrollbarVisible")
-				defaultSettings.scrollbarVisible = static_cast<bool>(_wtoi(settingValue.c_str()));
+				defaultSettings.scrollbarVisible = static_cast<bool>(stoi(settingValue));
 			else if (settingName == L"PosX")
-				defaultSettings.position.x = _wtoi(settingValue.c_str());
+				defaultSettings.position.x = stoi(settingValue);
 			else if (settingName == L"PosY")
-				defaultSettings.position.y = _wtoi(settingValue.c_str());
+				defaultSettings.position.y = stoi(settingValue);
 			else if (settingName == L"FontSizeWidth")
-				defaultSettings.fontSize.width = _wtoi(settingValue.c_str());
+				defaultSettings.fontSize.width = stoi(settingValue);
 			else if (settingName == L"FontSizeHeight")
-				defaultSettings.fontSize.height = _wtoi(settingValue.c_str());
+				defaultSettings.fontSize.height = stoi(settingValue);
 			else if (settingName == L"FontName")
 				defaultSettings.fontName = settingValue;
 			else if (settingName == L"IsFullscreen")
-				defaultSettings.isFullscreen = static_cast<bool>(_wtoi(settingValue.c_str()));
+				defaultSettings.isFullscreen = static_cast<bool>(stoi(settingValue));
 			else if (settingName == L"WindowName")
 				defaultSettings.windowName = settingValue;
 			else if (settingName == L"WindowControlsVisible")
-				defaultSettings.windowControlsVisible = static_cast<bool>(_wtoi(settingValue.c_str()));
+				defaultSettings.windowControlsVisible = static_cast<bool>(stoi(settingValue));
 			else if (settingName == L"NewDir")
-				CreateDirectoryW(settingValue.c_str(), NULL);
+				CreateDirectory(std::string(settingValue.begin(), settingValue.end()).c_str(), NULL);
 		}
 
 		//Obfuscate project settings file in the EngineCore directory
-		std::ofstream settingsFileOut(loc.path + L"/" + loc.fileName + L".ytf", std::ios::binary);
+		std::ofstream settingsFileOut(loc.path + "/" + loc.fileName + ".ytf", std::ios::binary);
 		if (settingsFileOut.fail())
 			return FILE_STREAM_ERROR;
 
-		WriteFileBytes(settingsFileOut, ObfuscateBytes(settingsFileBytes, projectKey));
+		settingsFileBytes = ObfuscateBytes(settingsFileBytes, projectKey);
+		WriteFileBytes(settingsFileOut, settingsFileBytes);
 
 		//Sets console look to default
 		ResetAll();
@@ -215,70 +234,84 @@ namespace YOLConsoleEngine
 			SetConsoleWindowSize(size.width, size.height, scrollbarVisible);
 	}
 
-	//Resets current position to default
-	void __Project::ResetPosition(const bool & update)
-	{
-		position = defaultSettings.position;
-
-		if (update)
-			SetWindowPos(GetConsoleWindow(), HWND_TOP, position.x, position.y, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_SHOWWINDOW);
-
-		//TODO also redraw background fully, once layer system is supported
-	}
-
-	//Resets current font to default
-	void __Project::ResetFont(const bool & update)
-	{
-		fontName = defaultSettings.fontName;
-		fontSize = defaultSettings.fontSize;
-
-		if (update)
+	#ifdef _WIN32
+		//Resets current position to default
+		void __Project::ResetPosition(const bool & update)
 		{
-			CONSOLE_FONT_INFOEX font = { sizeof(CONSOLE_FONT_INFOEX) };
-			GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &font);
-			AddFontResourceW((L"EngineCore/Fonts/" + defaultSettings.fontName + L".ttf").c_str());
-			wcscpy_s(font.FaceName, defaultSettings.fontName.c_str());
-			font.dwFontSize.X = defaultSettings.GetFontSize().Width();
-			font.dwFontSize.Y = defaultSettings.GetFontSize().Height();
-			SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &font);
+			position = defaultSettings.position;
+
+			if (update)
+				SetWindowPos(GetConsoleWindow(), HWND_TOP, position.x, position.y, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_SHOWWINDOW);
+
+			//TODO also redraw background fully, once layer system is supported
 		}
-	}
 
-	//Resets current screen display to default
-	void __Project::ResetFullscreen(const bool & update)
-	{
-		isFullscreen = defaultSettings.isFullscreen;
-
-		if (update)
-			SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE),
-				isFullscreen ? CONSOLE_FULLSCREEN_MODE : CONSOLE_WINDOWED_MODE, 0);
-	}
-
-	//Resets current display of control buttons to default
-	void __Project::ResetWindowStyle(const bool & update)
-	{
-		windowControlsVisible = defaultSettings.windowControlsVisible;
-
-		if (update)
+		//Resets current font to default
+		void __Project::ResetFont(const bool & update)
 		{
-			LONG_PTR style = GetWindowLongPtr(GetConsoleWindow(), GWL_STYLE);
-			SetWindowLongPtr(GetConsoleWindow(), GWL_STYLE,
-				windowControlsVisible ? style : style & ~WS_SYSMENU);
+			fontName = defaultSettings.fontName;
+			fontSize = defaultSettings.fontSize;
+
+			if (update)
+			{
+				CONSOLE_FONT_INFOEX font = { sizeof(CONSOLE_FONT_INFOEX) };
+				GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &font);
+				AddFontResourceW((L"EngineCore/Fonts/" + defaultSettings.fontName + L".ttf").c_str());
+				wcscpy_s(font.FaceName, defaultSettings.fontName.c_str());
+				font.dwFontSize.X = defaultSettings.GetFontSize().Width();
+				font.dwFontSize.Y = defaultSettings.GetFontSize().Height();
+				SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &font);
+			}
 		}
-	}
+
+		//Resets current screen display to default
+		void __Project::ResetFullscreen(const bool & update)
+		{
+			isFullscreen = defaultSettings.isFullscreen;
+
+			if (update)
+				SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE),
+					isFullscreen ? CONSOLE_FULLSCREEN_MODE : CONSOLE_WINDOWED_MODE, 0);
+		}
+
+		//Resets current display of control buttons to default
+		void __Project::ResetWindowStyle(const bool & update)
+		{
+			windowControlsVisible = defaultSettings.windowControlsVisible;
+
+			if (update)
+			{
+				LONG_PTR style = GetWindowLongPtr(GetConsoleWindow(), GWL_STYLE);
+				SetWindowLongPtr(GetConsoleWindow(), GWL_STYLE,
+					windowControlsVisible ? style : style & ~WS_SYSMENU);
+			}
+		}
+	#else
+		//Signal handler for terminal resize 
+		void __Project::OnWindowResize(int signal)
+		{
+			selfReference->ResetSize(true); 
+			SetColor(selfReference->textColor, selfReference->backgroundColor);
+			ClearConsole();
+		}
+	#endif
 
 	//Resets everything
 	void __Project::ResetAll(const bool & update)
 	{
-		ResetFullscreen(update);
-		ResetPosition(update);
-		ResetColors(update);
-		ResetWindowStyle(update);
-		ResetFont(update);
-		ResetSize(update);
+		#ifdef _WIN32
+			ResetWindowStyle(update);
+			ResetFont(update);
+			ResetFullscreen(update);
+			ResetPosition(update);
 
-		if (update)
-			SetConsoleTitleW(defaultSettings.windowName.c_str());
+			if (update)
+				SetConsoleTitleW(defaultSettings.windowName.c_str());
+		#endif
+
+		ResetColors(update);
+		ResetSize(update);
+		ClearConsole();
 	}
 
 	//Prints success message in green text

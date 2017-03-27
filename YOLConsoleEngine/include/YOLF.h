@@ -70,22 +70,22 @@ namespace YOLConsoleEngine
 	//Reads file contents and returns wistringstream
 	YOL_ENGINE_API std::wstringstream FileToWSS(std::wifstream & inputFile);
 
-	//Obfuscatees sequence of bytes with the given key and outputs directly to the output vector
+	//Obfuscates sequence of bytes with the given key and outputs directly to the output vector
 	//NOTE: this is in no way cryptographically secure and should never be used 
 	//for serious data encryption. This only prevents project assets from decompilation
 	YOL_ENGINE_API void ObfuscateBytes(const std::vector<unsigned char> & inputBytes, const std::wstring & key, std::vector<unsigned char> & outputBytes);
 
-	//Deobfuscatees sequence of bytes with the given key and outputs directly to the output vector
+	//Deobfuscates sequence of bytes with the given key and outputs directly to the output vector
 	//NOTE: this is in no way cryptographically secure and should never be used 
 	//for serious data encryption. This only prevents project assets from decompilation
 	YOL_ENGINE_API void DeobfuscateBytes(const std::vector<unsigned char> & inputBytes, const std::wstring & key, std::vector<unsigned char> & outputBytes);
 
-	//Obfuscatees sequence of bytes with the given key and returns vector of bytes
+	//Obfuscates sequence of bytes with the given key and returns vector of bytes
 	//NOTE: this is in no way cryptographically secure and should never be used 
 	//for serious data encryption. This only prevents project assets from decompilation
 	YOL_ENGINE_API std::vector<unsigned char> ObfuscateBytes(const std::vector<unsigned char> & inputBytes, const std::wstring & key);
 
-	//Deobfuscatees sequence of bytes with the given key and returns vector of bytes
+	//Deobfuscates sequence of bytes with the given key and returns vector of bytes
 	//NOTE: this is in no way cryptographically secure and should never be used 
 	//for serious data encryption. This only prevents project assets from decompilation
 	YOL_ENGINE_API std::vector<unsigned char> DeobfuscateBytes(const std::vector<unsigned char> & inputBytes, const std::wstring & key);
@@ -111,13 +111,24 @@ namespace YOLConsoleEngine
 
 
 	//Check for file's or folder's existance
-	YOL_ENGINE_API bool FileExists(const std::wstring & file);
+	YOL_ENGINE_API bool FileExists(const std::string & file);
 
-	//Gets HWID of the device
-	YOL_ENGINE_API std::string GetHWID(const bool & putBrackets = true);
+	//Returns CPU Serial Number
+	YOL_ENGINE_API std::string GetPSN();
 
-	//Returns full path to the file including name
-	YOL_ENGINE_API std::wstring GetFilePath(const std::wstring & file);
+	#ifdef _WIN32
+		//Returns HWID of the device
+		YOL_ENGINE_API std::string GetHWID(const bool & putBrackets = true);
+
+		//Returns full path to the file including name
+		YOL_ENGINE_API std::string GetFilePath(const std::string & file);
+	#else
+		//Returns full path to the file including name
+		std::string GetFilePath(const std::string & file);
+
+		//Replacement for windows _getch()
+		YOL_ENGINE_API int _getch();
+	#endif
 
 
 	//Returs amount of digits in a number

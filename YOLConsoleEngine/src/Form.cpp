@@ -56,7 +56,7 @@ namespace YOLConsoleEngine
 
 		//Change file location
 		if (YOL_ENGINE_DEBUG)
-			location = __Location(L"EngineCoreRaw/" + std::wstring(loc.filePath, 11, loc.filePath.size() - 14) + L"txt");
+			location = __Location("EngineCoreRaw/" + std::string(loc.filePath, 11, loc.filePath.size() - 14) + "txt");
 
 		//Open form file and get all bytes
 		std::ifstream formFileIn(location.filePath, std::ios::binary);
@@ -95,11 +95,12 @@ namespace YOLConsoleEngine
 		}
 
 		//Obfuscate form file in the EngineCore directory
-		std::ofstream formFileOut(loc.path + L"/" + loc.fileName + L".ytf", std::ios::binary);
+		std::ofstream formFileOut(loc.path + "/" + loc.fileName + ".ytf", std::ios::binary);
 		if (formFileOut.fail())
 			return FILE_STREAM_ERROR;
 
-		WriteFileBytes(formFileOut, ObfuscateBytes(formFileBytes, project->GetProjectKey()));
+		formFileBytes = ObfuscateBytes(formFileBytes, project->GetProjectKey());
+		WriteFileBytes(formFileOut, formFileBytes);
 
 		//Do not allow forms with no input fields
 		if (input.size() < 1)
@@ -111,8 +112,8 @@ namespace YOLConsoleEngine
 	//Goes through each input field and calls Draw() method
 	void __Form::Draw()
 	{
-		for each (std::shared_ptr<__FormInput> n in input)
-			n->Draw(position);
+		for(int i =0; i < input.size(); i++)
+			input[i]->Draw(position);
 
 		//Active input is redrawn so the cursor is in the right position
 		input[currentActiveInput]->Draw(position);
@@ -125,7 +126,7 @@ namespace YOLConsoleEngine
 		//Enter hit on button input
 		if (keycode == VK_RETURN && input[currentActiveInput]->GetType() == L"INPUT_BUTTON") 
 		{
-			return _wtoi(input[currentActiveInput]->GetData().c_str());
+			return stoi(input[currentActiveInput]->GetData());
 		}
 		else if (keycode == VK_TAB) //Goes to the next input field
 		{

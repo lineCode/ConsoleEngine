@@ -54,17 +54,19 @@ namespace YOLConsoleEngine
 		//Resets current size and scrollbar to default
 		void ResetSize(const bool & update = true);
 
-		//Resets current position to default
-		void ResetPosition(const bool & update = true);
+		#ifdef _WIN32
+			//Resets current position to default
+			void ResetPosition(const bool & update = true);
 
-		//Resets current font to default
-		void ResetFont(const bool & update = true);
+			//Resets current font to default
+			void ResetFont(const bool & update = true);
 
-		//Resets current screen display to default
-		void ResetFullscreen(const bool & update = true);
+			//Resets current screen display to default
+			void ResetFullscreen(const bool & update = true);
 
-		//Resets current display of control buttons to default
-		void ResetWindowStyle(const bool & update = true);
+			//Resets current display of control buttons to default
+			void ResetWindowStyle(const bool & update = true);
+		#endif
 
 		//Resets every current setting to default
 		void ResetAll(const bool & update = true);
@@ -133,6 +135,14 @@ namespace YOLConsoleEngine
 
 		//Default console settings loaded from file
 		__ProjectSettings defaultSettings;
+
+		#ifdef __linux__
+			//Signal handler for terminal resize 
+			static void OnWindowResize(int signal);
+
+			//Reference to self to handle signals statically
+			static __Project * selfReference;
+		#endif
 	};
 }
 
