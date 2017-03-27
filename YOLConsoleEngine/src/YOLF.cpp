@@ -269,7 +269,8 @@ namespace YOLConsoleEngine
 	void GotoXY(const int & x, const int & y)
 	{
 		#ifdef _WIN32
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {x,y});
+			COORD coord{ x,y };
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 		#else
 			std::wcout << "\33[" << y << ";" << x <<"H";
 		#endif
@@ -349,25 +350,6 @@ namespace YOLConsoleEngine
 		return (stat(file.c_str(), &buf) == 0);
 	}
 
-	//Returns CPU Serial Number
-	std::string GetPSN()
-	{
-		char * psn;
-		int varEAX, varEBX, varECX, varEDX;
-    char str[9];
-    
-    __asm__ __volatile__ ("cpuid"   : "=a" (varEAX), "=b" (varEBX), "=c" (varECX), "=d" (varEDX) : "a" (1));
-    sprintf(str, "%08X", varEAX); 
-    sprintf(psn, "%C%C%C%C-%C%C%C%C", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
-    __asm__ __volatile__ ("cpuid"   : "=a" (varEAX), "=b" (varEBX), "=c" (varECX), "=d" (varEDX) : "a" (3));
-    sprintf(str, "%08X", varEDX);
-    sprintf(psn, "%s-%C%C%C%C-%C%C%C%C", psn, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
-    sprintf(str, "%08X", varECX);
-    sprintf(psn, "%s-%C%C%C%C-%C%C%C%C", psn, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
-
-    return std::string(psn);
-	}
-
 	#ifdef _WIN32
 		//Returns HWID of the device
 		std::string GetHWID(const bool & putBrackets)
@@ -386,10 +368,10 @@ namespace YOLConsoleEngine
 		}
 
 		//Returns full path to the file including name
-		std::string GetFilePath(const std::wstring & file)
+		std::string GetFilePath(const std::string & file)
 		{
 			char fullPathBuf[MAX_PATH];
-			GetFullPathName(file.c_str(), MAX_PATH, fullPathBuf, NULL);
+			GetFullPathNameA(file.c_str(), MAX_PATH, fullPathBuf, NULL);
 			return std::string(fullPathBuf);
 		}
 	#else
@@ -403,17 +385,36 @@ namespace YOLConsoleEngine
 		}
 
 		//Replacement for windows _getch()
-		int _getch(void)
+		int _getwch(void)
 		{
-	    struct termios oldattr, newattr;
-	    int ch;
-	    tcgetattr( STDIN_FILENO, &oldattr );
-	    newattr = oldattr;
-	    newattr.c_lflag &= ~( ICANON | ECHO );
-	    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-	    ch = getwchar();
-	    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
-	    return ch;
+			struct termios oldattr, newattr;
+			int ch;
+			tcgetattr( STDIN_FILENO, &oldattr );
+			newattr = oldattr;
+			newattr.c_lflag &= ~( ICANON | ECHO );
+			tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+			ch = getwchar();
+			tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+			return ch;
+		}
+
+		//Returns CPU Serial Number
+		std::string GetPSN()
+		{
+			char * psn;
+			int varEAX, varEBX, varECX, varEDX;
+			char str[9];
+
+			__asm__ __volatile__("cpuid"   : "=a" (varEAX), "=b" (varEBX), "=c" (varECX), "=d" (varEDX) : "a" (1));
+			sprintf(str, "%08X", varEAX);
+			sprintf(psn, "%C%C%C%C-%C%C%C%C", str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+			__asm__ __volatile__("cpuid"   : "=a" (varEAX), "=b" (varEBX), "=c" (varECX), "=d" (varEDX) : "a" (3));
+			sprintf(str, "%08X", varEDX);
+			sprintf(psn, "%s-%C%C%C%C-%C%C%C%C", psn, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+			sprintf(str, "%08X", varECX);
+			sprintf(psn, "%s-%C%C%C%C-%C%C%C%C", psn, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
+
+			return std::string(psn);
 		}
 	#endif
 }

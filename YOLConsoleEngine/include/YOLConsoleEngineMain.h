@@ -30,9 +30,9 @@ Since there is no actual docs right now I'm going to write very important engine
 //Regulation defines for compiling and using YOLConsoleEngine as a DYNAMIC library
 #ifdef _WIN32
 	#ifdef YOL_ENGINE_EXPORTS
-		#define YOL_ENGINE_API extern "C" __declspec(dllexport)
+		#define YOL_ENGINE_API __declspec(dllexport)
 	#else
-		#define YOL_ENGINE_API extern "C" __declspec(dllimport)
+		#define YOL_ENGINE_API __declspec(dllimport)
 	#endif
 #else
 	#define YOL_ENGINE_API 
@@ -63,7 +63,7 @@ Since there is no actual docs right now I'm going to write very important engine
 	#define VK_RETURN 0x0D
 	#define VK_BACK 0x7F
 	#define OutputDebugStringW(a) {}
-	#define CreateDirectory(name, value) mkdir(name, ACCESSPERMS)
+	#define CreateDirectoryA(name, value) mkdir(name, ACCESSPERMS)
 #else
 	#include <io.h>							//UTF8 console output support
 	#include <Windows.h>				//Lots of good stuff

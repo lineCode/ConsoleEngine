@@ -113,8 +113,6 @@ namespace YOLConsoleEngine
 	//Check for file's or folder's existance
 	YOL_ENGINE_API bool FileExists(const std::string & file);
 
-	//Returns CPU Serial Number
-	YOL_ENGINE_API std::string GetPSN();
 
 	#ifdef _WIN32
 		//Returns HWID of the device
@@ -126,8 +124,11 @@ namespace YOLConsoleEngine
 		//Returns full path to the file including name
 		std::string GetFilePath(const std::string & file);
 
+		//Returns CPU Serial Number
+		YOL_ENGINE_API std::string GetPSN();
+
 		//Replacement for windows _getch()
-		YOL_ENGINE_API int _getch();
+		YOL_ENGINE_API int _getwch();
 	#endif
 
 

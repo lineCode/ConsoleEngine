@@ -4,6 +4,11 @@
 //#include <crtdbg.h>
 
 #include <iostream>
+
+#ifdef _WIN32
+	#include <conio.h>
+#endif
+
 #include "YOLConsoleEngineMain.h"
 
 using namespace std;
@@ -19,10 +24,10 @@ int main()
 
 	fr.Draw();
 	while (true)
-		fr.Update(_getch());
+		fr.Update(_getwch());
 	
 	//_CrtDumpMemoryLeaks();	
-	_getch();
+	_getwch();
 
 	return 0;
 }

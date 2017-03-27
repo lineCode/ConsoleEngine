@@ -28,8 +28,10 @@ namespace YOLConsoleEngine
 	//Keeps track if __Project object already exists or not
 	bool __Project::doesExist = false;
 
-	//Reference to self to handle signals statically
-	__Project * __Project::selfReference = nullptr;
+	#ifdef __linux__
+		//Reference to self to handle signals statically
+		__Project * __Project::selfReference = nullptr;
+	#endif
 	
 	//Initializes all directories, settings, and other project related stuff
 	__Project::__Project(const __Location & loc, const std::wstring & key)
@@ -74,18 +76,18 @@ namespace YOLConsoleEngine
 		//Creates engine directories
 		if (YOL_ENGINE_DEBUG)
 		{
-			CreateDirectory("EngineCoreRaw", NULL);
-			CreateDirectory("EngineCoreRaw/UI", NULL);
-			CreateDirectory("EngineCoreRaw/UI/Forms", NULL);
-			CreateDirectory("EngineCoreRaw/UI/Menus", NULL);
-			CreateDirectory("EngineCoreRaw/Sprites", NULL);
+			CreateDirectoryA("EngineCoreRaw", NULL);
+			CreateDirectoryA("EngineCoreRaw/UI", NULL);
+			CreateDirectoryA("EngineCoreRaw/UI/Forms", NULL);
+			CreateDirectoryA("EngineCoreRaw/UI/Menus", NULL);
+			CreateDirectoryA("EngineCoreRaw/Sprites", NULL);
 		}
-		CreateDirectory("EngineCore", NULL);
-		CreateDirectory("EngineCore/UI", NULL);
-		CreateDirectory("EngineCore/UI/Forms", NULL);
-		CreateDirectory("EngineCore/UI/Menus", NULL);
-		CreateDirectory("EngineCore/Fonts", NULL);
-		CreateDirectory("EngineCore/Sprites", NULL);
+		CreateDirectoryA("EngineCore", NULL);
+		CreateDirectoryA("EngineCore/UI", NULL);
+		CreateDirectoryA("EngineCore/UI/Forms", NULL);
+		CreateDirectoryA("EngineCore/UI/Menus", NULL);
+		CreateDirectoryA("EngineCore/Fonts", NULL);
+		CreateDirectoryA("EngineCore/Sprites", NULL);
 
 		//Loads project settings from file
 		LoadSettingsFromFile(loc);
@@ -197,7 +199,7 @@ namespace YOLConsoleEngine
 			else if (settingName == L"WindowControlsVisible")
 				defaultSettings.windowControlsVisible = static_cast<bool>(stoi(settingValue));
 			else if (settingName == L"NewDir")
-				CreateDirectory(std::string(settingValue.begin(), settingValue.end()).c_str(), NULL);
+				CreateDirectoryA(std::string(settingValue.begin(), settingValue.end()).c_str(), NULL);
 		}
 
 		//Obfuscate project settings file in the EngineCore directory
