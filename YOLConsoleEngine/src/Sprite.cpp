@@ -26,7 +26,7 @@ publish, and distribute this file as you see fit.
 */
 
 //Global include for all YOLConsoleEngine modules
-#include "../include/YOLConsoleEngineMain.h"
+#include "../include/YOLConsoleEngine.h"
 
 namespace YOLConsoleEngine
 {

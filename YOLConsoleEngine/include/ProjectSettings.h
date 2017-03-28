@@ -18,7 +18,7 @@ publish, and distribute this file as you see fit.
 #define YOL_CONSOLE_ENGINE_PROJECT_SETTINGS_H
 
 //Global include for all YOLConsoleEngine modules
-#include "../include/YOLConsoleEngineMain.h"
+#include "YOLConsoleEngine.h"
 
 namespace YOLConsoleEngine
 {

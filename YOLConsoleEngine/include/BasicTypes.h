@@ -17,7 +17,7 @@ publish, and distribute this file as you see fit.
 #define YOL_CONSOLE_ENGINE_BASICTYPES_H
 
 //Global include for all YOLConsoleEngine modules
-#include "YOLConsoleEngineMain.h"
+#include "YOLConsoleEngine.h"
 
 namespace YOLConsoleEngine
 {

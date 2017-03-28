@@ -9,7 +9,7 @@
 	#include <conio.h>
 #endif
 
-#include "YOLConsoleEngineMain.h"
+#include <YOLConsoleEngine.h>
 
 using namespace std;
 using namespace YOLConsoleEngine;
