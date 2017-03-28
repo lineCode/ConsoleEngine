@@ -7,9 +7,11 @@
 
 #ifdef _WIN32
 	#include <conio.h>
+	#include "YOLConsoleEngine.h"
+#else
+	//Use installed header on Linux
+	#include <YOLConsoleEngine.h>
 #endif
-
-#include <YOLConsoleEngine.h>
 
 using namespace std;
 using namespace YOLConsoleEngine;
