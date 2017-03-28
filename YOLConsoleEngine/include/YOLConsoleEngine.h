@@ -54,19 +54,28 @@ Since there is no actual docs right now I'm going to write very important engine
 
 //System includes
 #ifdef __linux__
+	#include <sys/ioctl.h>			//Terminal/console size
 	#include <signal.h>					//Handles different terminal signals
 	#include <termios.h>				//Provides replacement for _getch();
 	#include <unistd.h>					//Provides replacement for _getch();
 	
 	//Linux systems require this defines to overwrite many of Windows' behaviours
 	#define VK_TAB 0x09
-	#define VK_RETURN 0x0D
+	#define VK_RETURN 0x0A
 	#define VK_BACK 0x7F
+	#define VK_UP 0x41
+	#define VK_DOWN 0x42
+	#define VK_RIGHT 0x43
+	#define VK_LEFT 0x44
+	#define VK_ESCAPE_CHAR '\033'
 	#define OutputDebugStringW(a) {}
 	#define CreateDirectoryA(name, value) mkdir(name, ACCESSPERMS)
 #else
 	#include <io.h>							//UTF8 console output support
 	#include <Windows.h>				//Lots of good stuff
+	
+	//Escape caracter for arrow controls
+	#define VK_ESCAPE_CHAR 0xFE
 #endif
 
 #include <fcntl.h>						//UTF8 console output support
@@ -80,9 +89,9 @@ Since there is no actual docs right now I'm going to write very important engine
 #include <memory>							//Smart pointers
 
 //Engine includes
-#include "YOLF.h"             //Core functions used in the YOLConsoleEngine
-#include "BasicTypes.h"       //Basic types and manipulations with them (__Size2, __Vec2, __EngineErrors)
 #include "Location.h"         //More convient way to store data of file location in the filesystem
+#include "BasicTypes.h"       //Basic types and manipulations with them (__Size2, __Vec2, __EngineErrors)
+#include "YOLF.h"             //Core functions used in the YOLConsoleEngine
 #include "ProjectSettings.h"  //Default settings for the Project class
 #include "Project.h"          //Project object for controlling various project settings
 #include "Menu.h"

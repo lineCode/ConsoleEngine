@@ -31,6 +31,9 @@ namespace YOLConsoleEngine
 	#ifdef __linux__
 		//Reference to self to handle signals statically
 		__Project * __Project::selfReference = nullptr;
+		
+		//Allows window to change size once
+		bool __Project::allowResizeOnce = false;
 	#endif
 	
 	//Initializes all directories, settings, and other project related stuff
@@ -292,9 +295,15 @@ namespace YOLConsoleEngine
 		//Signal handler for terminal resize 
 		void __Project::OnWindowResize(int signal)
 		{
-			selfReference->ResetSize(true); 
-			SetColor(selfReference->textColor, selfReference->backgroundColor);
-			ClearConsole();
+			//Reset screen if signal was recieved not from SetConsoleWindowSize();
+			if(allowResizeOnce)
+				allowResizeOnce = false;
+			else
+			{
+				selfReference->ResetSize(true); 
+				SetColor(selfReference->textColor, selfReference->backgroundColor);
+				ClearConsole();
+			}
 		}
 	#endif
 

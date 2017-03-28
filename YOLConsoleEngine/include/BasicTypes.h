@@ -61,6 +61,9 @@ namespace YOLConsoleEngine
 		//Returns height value
 		inline unsigned int Height() { return height; }
 
+		inline bool operator==(const __Size2& other) { return (width == other.width && height == other.height); }
+		inline bool operator!=(const __Size2& other) { return !(*this==other); }
+
 	private:
 		unsigned int width;
 		unsigned int height;

@@ -104,7 +104,7 @@ namespace YOLConsoleEngine
 
 		//Updates menu based on input
 		//Returns current active item
-		int Update(const int & keycode);
+		int Update(int keycode);
 		
 		//Returns menu file location
 		inline __Location GetLocation() { return location; }

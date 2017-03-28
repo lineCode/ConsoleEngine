@@ -195,42 +195,42 @@ namespace YOLConsoleEngine
 		#else
 			switch(text)
 			{
-				case cBlack: std::wcout << L"\033[30m"; break;
-				case cBlue: std::wcout << L"\033[34m"; break;
-				case cGreen: std::wcout << L"\033[32m"; break;
-				case cCyan: std::wcout << L"\033[36m"; break;
-				case cRed: std::wcout << L"\033[31m"; break;
-				case cMagenta: std::wcout << L"\033[35m"; break;
-				case cBrown: std::wcout << L"\033[33m"; break;
-				case cLightGray: std::wcout << L"\033[37m"; break;
-				case cDarkGray: std::wcout << L"\033[90m"; break;
-				case cLightBlue: std::wcout << L"\033[94m"; break;
-				case cLightGreen: std::wcout << L"\033[92m"; break;
-				case cLightCyan: std::wcout << L"\033[96m"; break;
-				case cLightRed: std::wcout << L"\033[91m"; break;
-				case cLightMagenta: std::wcout << L"\033[95m"; break;
-				case cYellow: std::wcout << L"\033[93m"; break;
-				case cWhite: std::wcout << L"\033[97m"; break;
+				case cBlack: std::wcout << VK_ESCAPE_CHAR << "[30m"; break;
+				case cBlue: std::wcout << VK_ESCAPE_CHAR << "[34m"; break;
+				case cGreen: std::wcout << VK_ESCAPE_CHAR << "[32m"; break;
+				case cCyan: std::wcout << VK_ESCAPE_CHAR << "[36m"; break;
+				case cRed: std::wcout << VK_ESCAPE_CHAR << "[31m"; break;
+				case cMagenta: std::wcout << VK_ESCAPE_CHAR << "[35m"; break;
+				case cBrown: std::wcout << VK_ESCAPE_CHAR << "[33m"; break;
+				case cLightGray: std::wcout << VK_ESCAPE_CHAR << "[37m"; break;
+				case cDarkGray: std::wcout << VK_ESCAPE_CHAR << "[90m"; break;
+				case cLightBlue: std::wcout << VK_ESCAPE_CHAR << "[94m"; break;
+				case cLightGreen: std::wcout << VK_ESCAPE_CHAR << "[92m"; break;
+				case cLightCyan: std::wcout << VK_ESCAPE_CHAR << "[96m"; break;
+				case cLightRed: std::wcout << VK_ESCAPE_CHAR << "[91m"; break;
+				case cLightMagenta: std::wcout << VK_ESCAPE_CHAR << "[95m"; break;
+				case cYellow: std::wcout << VK_ESCAPE_CHAR << "[93m"; break;
+				case cWhite: std::wcout << VK_ESCAPE_CHAR << "[97m"; break;
 			}
 
 			switch(background)
 			{
-				case cBlack: std::wcout << L"\033[40m"; break;
-				case cBlue: std::wcout << L"\033[44m"; break;
-				case cGreen: std::wcout << L"\033[42m"; break;
-				case cCyan: std::wcout << L"\033[46m"; break;
-				case cRed: std::wcout << L"\033[41m"; break;
-				case cMagenta: std::wcout << L"\033[45m"; break;
-				case cBrown: std::wcout << L"\033[43m"; break;
-				case cLightGray: std::wcout << L"\033[47m"; break;
-				case cDarkGray: std::wcout << L"\033[100m"; break;
-				case cLightBlue: std::wcout << L"\033[104m"; break;
-				case cLightGreen: std::wcout << L"\033[102m"; break;
-				case cLightCyan: std::wcout << L"\033[106m"; break;
-				case cLightRed: std::wcout << L"\033[101m"; break;
-				case cLightMagenta: std::wcout << L"\033[105m"; break;
-				case cYellow: std::wcout << L"\033[103m"; break;
-				case cWhite: std::wcout << L"\033[107m"; break;
+				case cBlack: std::wcout << VK_ESCAPE_CHAR << "[40m"; break;
+				case cBlue: std::wcout << VK_ESCAPE_CHAR << "[44m"; break;
+				case cGreen: std::wcout << VK_ESCAPE_CHAR << "[42m"; break;
+				case cCyan: std::wcout << VK_ESCAPE_CHAR << "[46m"; break;
+				case cRed: std::wcout << VK_ESCAPE_CHAR << "[41m"; break;
+				case cMagenta: std::wcout << VK_ESCAPE_CHAR << "[45m"; break;
+				case cBrown: std::wcout << VK_ESCAPE_CHAR << "[43m"; break;
+				case cLightGray: std::wcout << VK_ESCAPE_CHAR << "[47m"; break;
+				case cDarkGray: std::wcout << VK_ESCAPE_CHAR << "[100m"; break;
+				case cLightBlue: std::wcout << VK_ESCAPE_CHAR << "[104m"; break;
+				case cLightGreen: std::wcout << VK_ESCAPE_CHAR << "[102m"; break;
+				case cLightCyan: std::wcout << VK_ESCAPE_CHAR << "[106m"; break;
+				case cLightRed: std::wcout << VK_ESCAPE_CHAR << "[101m"; break;
+				case cLightMagenta: std::wcout << VK_ESCAPE_CHAR << "[105m"; break;
+				case cYellow: std::wcout << VK_ESCAPE_CHAR << "[103m"; break;
+				case cWhite: std::wcout << VK_ESCAPE_CHAR << "[107m"; break;
 			}
 			
 		#endif
@@ -261,7 +261,8 @@ namespace YOLConsoleEngine
 			SMALL_RECT info = { 0, 0, width - 1, height - 1 };
 			SetConsoleWindowInfo(h, TRUE, &info);
 		#else
-			std::wcout << "\e[8;" << height << ";" << width << "t";
+			__Project::allowResizeOnce = true;
+			std::wcout << VK_ESCAPE_CHAR << "[8;" << height << ";" << width << "t";
 		#endif
 	}
 
@@ -272,7 +273,7 @@ namespace YOLConsoleEngine
 			COORD coord{ x,y };
 			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 		#else
-			std::wcout << "\33[" << y << ";" << x <<"H";
+			std::wcout << VK_ESCAPE_CHAR << "[" << y+1 << ";" << x+1 <<"H";
 		#endif
 	}
 
@@ -291,7 +292,7 @@ namespace YOLConsoleEngine
 				SetConsoleCursorPosition(hStdOut, coord);
 			}
 		#else
-			std::wcout << "\033[H\033[J";
+			std::wcout << VK_ESCAPE_CHAR << "[2J";
 		#endif
 	}
 
@@ -374,6 +375,14 @@ namespace YOLConsoleEngine
 			GetFullPathNameA(file.c_str(), MAX_PATH, fullPathBuf, NULL);
 			return std::string(fullPathBuf);
 		}
+
+		//Returns size of the console window
+		__Size2 GetConsoleWindowSize()
+		{
+			CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+			GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &bufferInfo);
+			return __Size2(bufferInfo.dwSize.X, bufferInfo.dwSize.Y);
+		}
 	#else
 		//Returns full path to the file including name
 		std::string GetFilePath(const std::string & file)
@@ -384,8 +393,16 @@ namespace YOLConsoleEngine
 			return std::string(); 
 		}
 
+		//Returns size of the console window
+		__Size2 GetConsoleWindowSize()
+		{
+			struct winsize w;
+    	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    	return __Size2(w.ws_col, w.ws_row);
+		}
+
 		//Replacement for windows _getch()
-		int _getwch(void)
+		int _getwch()
 		{
 			struct termios oldattr, newattr;
 			int ch;

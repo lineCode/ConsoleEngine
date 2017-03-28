@@ -66,7 +66,13 @@ namespace YOLConsoleEngine
 
 			//Resets current display of control buttons to default
 			void ResetWindowStyle(const bool & update = true);
-		#endif
+		#else
+			//Allows window to change size once. Set to true from SetConsoleWindowSize()
+			//and when signal handler recieves SIGWINCH - size of the window does not change
+			//because it is set to te new value that was set by SetConsoleWindowSize()
+			//TLDR: allows to change window size only from callin SetConsoleWindowsSize();
+			static bool allowResizeOnce;
+		#endif;
 
 		//Resets every current setting to default
 		void ResetAll(const bool & update = true);

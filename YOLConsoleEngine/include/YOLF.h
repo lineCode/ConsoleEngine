@@ -97,6 +97,9 @@ namespace YOLConsoleEngine
 	//Sets a size of the console window. It is also possible to enable/disable scroll
 	YOL_ENGINE_API void SetConsoleWindowSize(const unsigned int & width, const unsigned int & height, const bool & isScrollVisible = false);
 
+	//Returns size of the console window
+	YOL_ENGINE_API __Size2 GetConsoleWindowSize();
+
 	//Updates only changed region
 	YOL_ENGINE_API void GotoXY(const int & x, const int & y);
 

@@ -185,30 +185,45 @@ namespace YOLConsoleEngine
 
 	//Updates menu based on input
 	//Returns current active item
-	int __Menu::Update(const int & keycode)
+	int __Menu::Update(int keycode)
 	{
+		if(keycode == VK_ESCAPE_CHAR)
+		{
+			//On windows arrow hit sends VK_ESCAPE_CHAR and right after that - keycode for arrow key
+			//So we need one step less
+			keycode = _getwch();
+
+			#ifdef __linux__
+				//On arrow hit on linux _getwch() recieves three characters:
+				//VK_ESCAPE_CHAR, '[', N, where N is a keycode for either 'A', 'B', 'C' or 'D'
+				//We already cought VK_ESCAPE_CHAR, and skipped '[' now we get actual N
+				keycode = _getwch();
+			#endif
+		}
+		
+
 		//Controls
 		if (controlDirection == CONTROL_HORIZONTAL)
 		{
 			//left
-			if ((controlKeys == ARROW_KEYS && keycode == 75) ||
+			if ((controlKeys == ARROW_KEYS && keycode == VK_LEFT) ||
 				(controlKeys == WASD_KEYS && keycode == 97))
 				PrevItem();
 
 			//right
-			else if ((controlKeys == ARROW_KEYS && keycode == 77) ||
+			else if ((controlKeys == ARROW_KEYS && keycode == VK_RIGHT) ||
 				(controlKeys == WASD_KEYS && keycode == 100))
 				NextItem();
 		}
 		else
 		{
 			//up
-			if ((controlKeys == ARROW_KEYS && keycode == 72) ||
+			if ((controlKeys == ARROW_KEYS && keycode == VK_UP) ||
 				(controlKeys == WASD_KEYS && keycode == 119))
 				PrevItem();
 
 			//down
-			else if ((controlKeys == ARROW_KEYS && keycode == 80) ||
+			else if ((controlKeys == ARROW_KEYS && keycode == VK_DOWN) ||
 				(controlKeys == WASD_KEYS && keycode == 115))
 				NextItem();
 		}
