@@ -75,7 +75,14 @@ Since there is no actual docs right now I'm going to write very important engine
 	#include <Windows.h>				//Lots of good stuff
 	
 	//Escape caracter for arrow controls
-	#define VK_ESCAPE_CHAR 0xFE
+	#define VK_ESCAPE_CHAR 0xE0
+
+	//For some reason arrow keys are different from Windows defaults?
+	#define VK_UP 0x48
+	#define VK_DOWN 0x50
+	#define VK_RIGHT 0x4D
+	#define VK_LEFT 0x4B
+
 #endif
 
 #include <fcntl.h>						//UTF8 console output support

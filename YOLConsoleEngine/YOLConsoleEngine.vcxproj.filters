@@ -45,9 +45,6 @@
     <ClInclude Include="include\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\YOLConsoleEngineMain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\YOLF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,6 +62,9 @@
     </ClInclude>
     <ClInclude Include="include\FormInput.h">
       <Filter>Header Files\Form\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\YOLConsoleEngine.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

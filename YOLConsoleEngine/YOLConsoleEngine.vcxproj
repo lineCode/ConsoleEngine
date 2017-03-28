@@ -30,7 +30,7 @@
     <ClInclude Include="include\Project.h" />
     <ClInclude Include="include\ProjectSettings.h" />
     <ClInclude Include="include\Sprite.h" />
-    <ClInclude Include="include\YOLConsoleEngineMain.h" />
+    <ClInclude Include="include\YOLConsoleEngine.h" />
     <ClInclude Include="include\YOLF.h" />
   </ItemGroup>
   <ItemGroup>
