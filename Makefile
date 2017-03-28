@@ -11,7 +11,6 @@ libYOLConsoleEngine.so: $(LIB_OBJECTS)
 	if [ ! -d "./build" ];then     \
 		mkdir build;           \
 	fi
-
 	g++ -Wall -std=c++11 -IYOLConsoleEngine/include -fPIC -w -march=native -o build/libYOLConsoleEngine.so $(LIB_OBJECTS) -shared
 
 tests: $(ENGINETESTS_SOURCES)
