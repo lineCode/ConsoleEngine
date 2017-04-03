@@ -1,11 +1,11 @@
-/* Number.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+/* InputNumber.cpp - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
 NUMBER INPUT FIELD for YOLConsoleEngine Forms
 Allows to set input field that supports user's number input
 
 NUMBER INPUT FORMAT
-"INPUT_NUMBER <x> <y> <textCol> <bgCol> <tipTextCol> <inputWidth> <allowNegative> <allowFloat> <allowMultiple> <tip> <val>"
+"INPUT_NUMBER <x> <y> <textCol> <bgCol> <tipTextCol> <inputWidth> <allowNegative> <allowFloat> <allowMultiple> <allowHex> <tip> <val>"
 
 INPUT_NUMBER - type of the input
 <x> and <y> - integer, specified input field position relative to Form X and Y
@@ -15,6 +15,7 @@ tip text color respectively
 <allowNegative> - bool, enables or disables '-' input character
 <allowFloat> - bool, enables or disables '.' input character
 <allowMultiple> - bool, enables or disables ' ' input character
+<allowHex> - bool, enables or disables A-F inputs
 <tip> - string, tip text (leave as "" for no tip)
 <val> - string, value text (leave as "" for no value)
 
@@ -60,6 +61,7 @@ namespace YOLConsoleEngine
 		allowNegative = false;
 		allowFloat = false;
 		allowMultiple = false;
+		allowHex = false;
 		inputType = L"INPUT_NUMBER";
 		data = std::wstring();
 		defaultData = std::wstring();
@@ -88,7 +90,7 @@ namespace YOLConsoleEngine
 		dataStream >> colorsTemp[0] >> colorsTemp[1] >> colorsTemp[2];
 		
 		//Other settings
-		dataStream >> fieldWidth >> allowNegative >> allowFloat >> allowMultiple;
+		dataStream >> fieldWidth >> allowNegative >> allowFloat >> allowMultiple >> allowHex;
 
 		//Set colors
 		textColor = static_cast<__ConsoleColor>(colorsTemp[0]);
@@ -160,6 +162,11 @@ namespace YOLConsoleEngine
 			   (keycode == '-' && allowNegative && data.back() != '-' && data.back() != '.') || //Minus sign
 			   (keycode == ' ' && allowMultiple && data.back() != ' ' &&  data.back() != '-' && data.back() != '.'))//Spacebar for multiple numbers
 			data.push_back((wchar_t)keycode);
+			
+			//Allow hex inputs
+			if(allowHex && ((keycode >= 65 && keycode <=70) || (keycode >= 97 && keycode <= 102)))
+				data.push_back(towupper((wchar_t)keycode));
+
 			Draw(ref);
 		}
 	}

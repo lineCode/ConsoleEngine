@@ -1,21 +1,20 @@
-/* InputText.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+/* InputFile.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
-TEXT INPUT FIELD for YOLConsoleEngine Forms
-Allows to set input field that supports user's string input
+FILE INPUT FIELD for YOLConsoleEngine Forms
+Allows to specify text string for file location
 
-TEXT INPUT FORMAT
-"INPUT_TEXT <x> <y> <textCol> <bgCol> <tipTextCol> <inputWidth> <tip> <val>"
+FILE INPUT FORMAT
+"INPUT_FILE <x> <y> <textCol> <bgCol> <inputWidth> <allowMultiple> <filePrefix>"
 
 INPUT_TEXT - type of the input
 <x> and <y> - integer, specified input field position relative to Form X and Y
-<textCol>, <bgCol>, <tipTextCol> - integer, values from __ConsoleColor enum that specify text color, background color and
-tip text color respectively
+<textCol>, <bgCol> - integer, values from __ConsoleColor enum that specify text color and background color
 <inputWidth> - interger, width of the text input field
-<tip> - string, tip text (leave as "" for no tip)
-<val> - string, value text (leave as "" for no value)
+<allowMultiple> - bool, enables or disables ',' input character
+<filePrefix> - string, added at the start of every file path string
 
-eg. "INPUT_TEXT 5 5 0 7 8 15 "HEY I'M A TIP" "VALUE WILL DISPLAY INSTEAD OF TIP""
+eg. "INPUT_FILE 5 5 0 7 15 0 "searchInThisFolder/""
 
 LICENSE
 This software is dual-licensed to the public domain and under the following
@@ -23,24 +22,24 @@ license: you are granted a perpetual, irrevocable license to copy, modify,
 publish, and distribute this file as you see fit.
 */
 
-#ifndef YOL_CONSOLE_ENGINE_FORM_INPUT_TEXT_H
-#define YOL_CONSOLE_ENGINE_FORM_INPUT_TEXT_H
+#ifndef YOL_CONSOLE_ENGINE_FORM_INPUT_FILE_H
+#define YOL_CONSOLE_ENGINE_FORM_INPUT_FILE_H
 
 //Global include for all YOLConsoleEngine modules
 #include "YOLConsoleEngine.h"
 
 namespace YOLConsoleEngine
 {
-	class YOL_ENGINE_API __InputText : public __FormInput
+	class YOL_ENGINE_API __InputFile : public __FormInput
 	{
 	public:
 		//Init constructor
-		__InputText(const std::shared_ptr<__Project> & pr);
+		__InputFile(const std::shared_ptr<__Project> & pr);
 
 		//Init constructor with parsing input settings
-		__InputText(const std::shared_ptr<__Project>& pr, const std::wstring & data);
+		__InputFile(const std::shared_ptr<__Project>& pr, const std::wstring & data);
 
-		~__InputText();
+		~__InputFile();
 
 		//Parses passed string to set up input field settings
 		__EngineErrors ParseInputData(const std::wstring & data);
@@ -55,14 +54,14 @@ namespace YOLConsoleEngine
 		inline std::wstring GetType() { return inputType; }
 
 
+		//Allows multiple files to be entered (' ' char for input)
+		bool allowMultiple;
+
 		//Width of the input field
 		unsigned int fieldWidth;
 
-		//Tip for the input field
-		std::wstring tip;
-
-		//Tip text color
-		__ConsoleColor tipTextColor;
+		//Value for file prefix
+		std::wstring filePrefix;
 
 	private:
 		//Initializes all variables

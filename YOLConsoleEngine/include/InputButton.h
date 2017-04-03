@@ -1,4 +1,4 @@
-/* Button.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+/* InputButton.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
 Button input that returns the code specified code when submitted

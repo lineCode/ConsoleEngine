@@ -23,6 +23,7 @@
     <ClInclude Include="include\Form.h" />
     <ClInclude Include="include\FormInput.h" />
     <ClInclude Include="include\InputButton.h" />
+    <ClInclude Include="include\InputFile.h" />
     <ClInclude Include="include\InputNumber.h" />
     <ClInclude Include="include\InputText.h" />
     <ClInclude Include="include\Location.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="src\BasicTypes.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\InputButton.cpp" />
+    <ClCompile Include="src\InputFile.cpp" />
     <ClCompile Include="src\InputNumber.cpp" />
     <ClCompile Include="src\InputText.cpp" />
     <ClCompile Include="src\Location.cpp" />

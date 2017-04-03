@@ -108,5 +108,6 @@ Since there is no actual docs right now I'm going to write very important engine
 #include "InputText.h"
 #include "InputNumber.h"
 #include "InputButton.h"
+#include "InputFile.h"
 
 #endif

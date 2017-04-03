@@ -1,4 +1,4 @@
-/* Button.cpp - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+/* InputButton.cpp - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
 Button input that returns the code specified code when submitted
@@ -75,7 +75,7 @@ namespace YOLConsoleEngine
 		//Input field position relative to form's X and Y
 		dataStream >> position.x >> position.y;
 
-		//Store three colors in the buffer since they first need to be
+		//Store four colors in the buffer since they first need to be
 		//converted to __ConsolerColor
 		int colorsTemp[4];
 		dataStream >> colorsTemp[0] >> colorsTemp[1] >> colorsTemp[2] >> colorsTemp[3];

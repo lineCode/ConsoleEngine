@@ -1,4 +1,4 @@
-/* Text.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+/* InputText.cpp - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
 TEXT INPUT FIELD for YOLConsoleEngine Forms

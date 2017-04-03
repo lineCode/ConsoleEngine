@@ -355,12 +355,10 @@ namespace YOLConsoleEngine
 		//Returns HWID of the device
 		std::string GetHWID(const bool & putBrackets)
 		{
-			HW_PROFILE_INFOW hwProfileInfo;
+			HW_PROFILE_INFOA hwProfileInfo;
 
-			GetCurrentHwProfileW(&hwProfileInfo);
-			std::wstring wc = hwProfileInfo.szHwProfileGuid;
-
-			std::string HWID(wc.begin(),wc.end());
+			GetCurrentHwProfileA(&hwProfileInfo);
+			std::string HWID = hwProfileInfo.szHwProfileGuid;
 
 			if (!putBrackets)
 				HWID.assign(HWID, 1, HWID.size() - 2);

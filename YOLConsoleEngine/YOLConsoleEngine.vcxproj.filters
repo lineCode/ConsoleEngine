@@ -66,6 +66,9 @@
     <ClInclude Include="include\YOLConsoleEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\InputFile.h">
+      <Filter>Header Files\Form\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BasicTypes.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files\Form\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\InputText.cpp">
+      <Filter>Source Files\Form\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputFile.cpp">
       <Filter>Source Files\Form\Input</Filter>
     </ClCompile>
   </ItemGroup>

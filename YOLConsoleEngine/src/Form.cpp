@@ -92,6 +92,8 @@ namespace YOLConsoleEngine
 				input.push_back(std::make_shared<__InputNumber>(__InputNumber(project, formFileLine)));
 			else if (formFileLine.find(L"INPUT_BUTTON") != std::wstring::npos) //INPUT_SUBMIT input
 				input.push_back(std::make_shared<__InputButton>(__InputButton(project, formFileLine)));
+			else if (formFileLine.find(L"INPUT_FILE") != std::wstring::npos) //INPUT_FILE input
+				input.push_back(std::make_shared<__InputFile>(__InputFile(project, formFileLine)));
 		}
 
 		//Obfuscate form file in the EngineCore directory
@@ -112,10 +114,14 @@ namespace YOLConsoleEngine
 	//Goes through each input field and calls Draw() method
 	void __Form::Draw()
 	{
-		for(int i =0; i < input.size(); i++)
+		for (int i = 0; i < input.size(); i++)
 			input[i]->Draw(position);
 
 		//Active input is redrawn so the cursor is in the right position
+		//Dirty hack that signals to Draw() method to draw button in active color
+		//data is resetted afterwards
+		if (input[currentActiveInput]->GetType() == L"INPUT_BUTTON")
+			input[currentActiveInput]->data.push_back(L'A');
 		input[currentActiveInput]->Draw(position);
 	}
 

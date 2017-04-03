@@ -1,11 +1,11 @@
-/* Number.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
+/* InputNumber.h - Part of the YOLConsoleEngine - v1.0 - HaselLoyance - public domain.
 No warranty implied; use at your own risk
 
 NUMBER INPUT FIELD for YOLConsoleEngine Forms
 Allows to set input field that supports user's number input
 
 NUMBER INPUT FORMAT
-"INPUT_NUMBER <x> <y> <textCol> <bgCol> <tipTextCol> <inputWidth> <allowNegative> <allowFloat> <allowMultiple> <tip> <val>"
+"INPUT_NUMBER <x> <y> <textCol> <bgCol> <tipTextCol> <inputWidth> <allowNegative> <allowFloat> <allowMultiple> <allowHex> <tip> <val>"
 
 INPUT_NUMBER - type of the input
 <x> and <y> - integer, specified input field position relative to Form X and Y
@@ -15,6 +15,7 @@ tip text color respectively
 <allowNegative> - bool, enables or disables '-' input character
 <allowFloat> - bool, enables or disables '.' input character
 <allowMultiple> - bool, enables or disables ' ' input character
+<allowHex> - bool, enables or disables A-F inputs
 <tip> - string, tip text (leave as "" for no tip)
 <val> - string, value text (leave as "" for no value)
 
@@ -67,8 +68,12 @@ namespace YOLConsoleEngine
 		//Allows float numbers (',' char for input)
 		bool allowFloat;
 
-		//Allows float numbers (' ' char for input)
+		//Allows multiple numbers to be entered (' ' char for input)
 		bool allowMultiple;
+
+		//Allows to enter letters A-F
+		bool allowHex;
+
 
 		//Tip for the input field
 		std::wstring tip;
