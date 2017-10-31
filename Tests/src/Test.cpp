@@ -61,11 +61,11 @@ int main()
 	d.Size(Size2(100, 30), true);
 	d.Color(c);
 
-	d.On(eChangeSize, [](DisplayTemp * d) {
+	d.On(evChangeSize, [](DisplayTemp * d) {
 		cout << "Applied new size: " << d->Size().ToString() << endl;
 	});
 
-	d.On(eChangeColor, [](DisplayTemp * d) {
+	d.On(evChangeColor, [](DisplayTemp * d) {
 		cout << "(Instance message) Display color changed to " << d->Color().foreground() << "  " << d->Color().background() << endl;
 	});
 

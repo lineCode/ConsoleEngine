@@ -52,9 +52,9 @@ namespace ConsoleEngine
         static Vec2 LerpUnclamped(const Vec2 & v1, const Vec2 & v2, const double & t);
 
         // UD: Moves a point current towards target
-        //   This is essentially the same as Vec2::Lerp but instead 
-        //   the function will ensure that the speed never exceeds 
-        //   maxDistanceDelta. Negative values of maxDistanceDelta 
+        //   This is essentially the same as Vec2::Lerp but instead
+        //   the function will ensure that the speed never exceeds
+        //   maxDistanceDelta. Negative values of maxDistanceDelta
         //   pushes the vector away from target
         static Vec2 MoveTowards(const Vec2 & current, const Vec2 & target, const double & maxDistanceDelta);
 
@@ -68,16 +68,16 @@ namespace ConsoleEngine
         static Vec2 Max(const Vec2 & v1, const Vec2 & v2);
 
         // UD: Gradually changes a vector towards a desired goal over time
-        //   The vector is smoothed by some spring - damper like function, 
+        //   The vector is smoothed by some spring - damper like function,
         //   which will never overshoot.
         static Vec2 SmoothDamp(const Vec2 & current, const Vec2 & target, Vec2 * currentVelocity, double smoothTime, const double & maxSpeed, const double & deltaTime);
-        
+
 		// Constructs a new vector with 0,0 values
         Vec2();
 
         // UD: Constructs a new vector with given X and Y values
         Vec2(const double & posX, const double & posY);
-		
+
         ~Vec2();
 
         // UD: Set X and Y values of an existing Vec2
@@ -85,39 +85,39 @@ namespace ConsoleEngine
 
         // UD: Multiplies existing vector variable-wise
         Vec2 * Scale(const Vec2 & v);
-        
+
         // UD: Returns the length of this vector
         double Magnitude() const;
 
         // UD: Returns the squared length of this vector
-        //   Calculating the squared magnitude instead of the magnitude 
-        //   is much faster. Often if you are comparing magnitudes of two vectors 
+        //   Calculating the squared magnitude instead of the magnitude
+        //   is much faster. Often if you are comparing magnitudes of two vectors
         //   you can just compare their squared magnitudes.
         double SqrMagnitude() const;
 
 		// UD: Dot Product of this vector and another one
-		//   For normalized vectors Dot returns 1 if they point in exactly 
-		//   the same direction; -1 if they point in completely opposite 
-		//   directions; and a number in between for other cases 
-		//   (e.g. Dot returns zero if vectors are perpendicular). For 
+		//   For normalized vectors Dot returns 1 if they point in exactly
+		//   the same direction; -1 if they point in completely opposite
+		//   directions; and a number in between for other cases
+		//   (e.g. Dot returns zero if vectors are perpendicular). For
 		//   vectors of arbitrary length the Dot return values are similar :
 		//   they get larger when the angle between vectors decreases
 		double Dot(const Vec2 & v) const;
-		
+
 		// Returns the unsigned angle assuming that this and v are points
 		double AngleToPoint(const Vec2 & v) const;
 
 		// UD: Returns the unsigned angle in degrees between this and v
-		//   The angle returned is the unsigned acute angle between the 
-		//   two vectors.This means the smaller of the two possible angles 
-		//   between the two vectors is used.The result is never greater 
+		//   The angle returned is the unsigned acute angle between the
+		//   two vectors.This means the smaller of the two possible angles
+		//   between the two vectors is used.The result is never greater
 		//   than 180 degrees.
 		double Angle(const Vec2 & v) const;
 
 		// UD: Returns the signed angle in degrees between this and v
-		//   The angle returned is the signed acute clockwise angle between 
-		//   the two vectors.This means the smaller of the two possible 
-		//   angles between the two vectors is used.The result is never 
+		//   The angle returned is the signed acute clockwise angle between
+		//   the two vectors.This means the smaller of the two possible
+		//   angles between the two vectors is used.The result is never
 		//   greater than 180 degrees or smaller than - 180 degrees
 		double SignedAngle(const Vec2 & v) const;
 
@@ -125,10 +125,10 @@ namespace ConsoleEngine
 		double Distance(Vec2 & v) const;
 
 		// UD: Returns new vector with a magnitude of 1
-		//   When normalized, a vector keeps the same direction but its length 
-		//   is 1.0. Note that the current vector is unchanged and a new normalized 
-		//   vector is returned.If you want to normalize the current vector, use 
-		//   .Normalize() function. If the vector is too small to be normalized a 
+		//   When normalized, a vector keeps the same direction but its length
+		//   is 1.0. Note that the current vector is unchanged and a new normalized
+		//   vector is returned.If you want to normalize the current vector, use
+		//   .Normalize() function. If the vector is too small to be normalized a
 		//   zero vector will be returned.
 		Vec2 Normalized() const;
 
@@ -136,32 +136,50 @@ namespace ConsoleEngine
 		Vec2 * ClampMagnitude(const double & maxLength);
 
         // UD: Makes this vector have a magnitude of 1
-        //   When normalized, a vector keeps the same direction but its length 
-        //   is 1.0. Note that this function will change the current  vector. If 
-        //   you want to keep the current vector unchanged, use .Normalized(). 
+        //   When normalized, a vector keeps the same direction but its length
+        //   is 1.0. Note that this function will change the current  vector. If
+        //   you want to keep the current vector unchanged, use .Normalized().
         //   If this vector is too small to be normalized it will be set to zero.
         Vec2 * Normalize();
 
 		// Alternative to x(). Returns width
-		inline double width() const { return _x; }
+		double width() const
+        {
+            return _x;
+        }
 
 		// Alternative to x(). Sets width
-		inline Vec2 * width(const double & width) { return x(width); };
+		Vec2 * width(const double & width)
+        {
+            return x(width);
+        };
 
 		// Alternative to y(). Returns height
-		inline double height() const { return _y; }
+		double height() const
+        {
+            return _y;
+        }
 
 		// Alternative to y(). Sets height
-		inline Vec2 * height(const double & height) { return y(height); };
+		Vec2 * height(const double & height)
+        {
+            return y(height);
+        }
 
         // Get X point
-        inline double x() const { return _x; }
+        double x() const
+        {
+            return _x;
+        }
 
         // Set X point
 		Vec2 * x(const double & posX);
 
         // Get Y point
-        inline double y() const { return _y; }
+        inline double y() const
+        {
+            return _y;
+        }
 
         // Set Y point
 		Vec2 * y(const double & posY);
@@ -188,16 +206,27 @@ namespace ConsoleEngine
         Vec2 operator-(const double &) const;
         Vec2 operator*(const double &) const;
         Vec2 operator/(const double &) const;
-        friend inline Vec2 operator+(const double & d, const Vec2 & v) { return v + d; }
-        friend inline Vec2 operator*(const double & d, const Vec2 & v) { return v * d; }
-        friend inline std::ostream & operator<<(std::ostream & os, const Vec2 & v) { 
-			os << v.ToString(true); return os; 
+        friend Vec2 operator+(const double & d, const Vec2 & v)
+        {
+            return v + d;
+        }
+        friend Vec2 operator*(const double & d, const Vec2 & v)
+        {
+            return v * d;
+        }
+        friend std::ostream & operator<<(std::ostream & os, const Vec2 & v)
+        {
+			os << v.ToString(true); return os;
 		}
-        friend inline bool operator==(const Vec2 & v1, const Vec2 & v2) { 
-			return YMath::IsEqualDouble(v1._x, v2._x) && YMath::IsEqualDouble(v1._y, v2._y); 
+        friend bool operator==(const Vec2 & v1, const Vec2 & v2)
+        {
+			return YMath::IsEqualDouble(v1._x, v2._x) && YMath::IsEqualDouble(v1._y, v2._y);
 		}
-        friend inline bool operator!=(const Vec2 & v1, const Vec2 & v2) { return !operator==(v1, v2); }
-        
+        friend bool operator!=(const Vec2 & v1, const Vec2 & v2)
+        {
+            return !operator==(v1, v2);
+        }
+
     private:
         // X point
         double _x;

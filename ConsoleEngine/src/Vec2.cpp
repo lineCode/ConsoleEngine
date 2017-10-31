@@ -95,27 +95,27 @@ Vec2 Vec2::SmoothDamp(const Vec2 & current, const Vec2 & target, Vec2 * currentV
 // UD: Constructs a new vector with 0,0 values
 Vec2::Vec2()
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	x(0)->y(0);
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
 // UD: Constructs a new vector with given X and Y values
 Vec2::Vec2(const double & posX, const double & posY)
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	x(posX)->y(posY);
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
-Vec2::~Vec2() 
+Vec2::~Vec2()
 {
-	RunCallback(eBeforeDestruct);
-	RunCallback(eAfterDestruct);
+	RunCallback(evBeforeDestruct);
+	RunCallback(evAfterDestruct);
 }
 
 // UD: Set X and Y values of an existing Vec2
@@ -206,8 +206,8 @@ Vec2 * Vec2::x(const double & posX)
 	if (!YMath::IsEqualDouble(posX, _x))
 	{
 		_x = posX;
-		ScheduleRun(eChangeX);
-		ScheduleRun(eChange);
+		ScheduleRun(evChangeX);
+		ScheduleRun(evChange);
 	}
 
 	return this;
@@ -219,8 +219,8 @@ Vec2 * Vec2::y(const double & posY)
 	if (!YMath::IsEqualDouble(posY, _y))
 	{
 		_y = posY;
-		ScheduleRun(eChangeY);
-		ScheduleRun(eChange);
+		ScheduleRun(evChangeY);
+		ScheduleRun(evChange);
 	}
 
 	return this;

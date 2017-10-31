@@ -91,13 +91,13 @@ namespace ConsoleEngine
 		Color Grayscaled(const Color & color) const;
 
 		// Get foreground color
-		inline ConsoleColor foreground() const { return _foreground; }
+		ConsoleColor foreground() const { return _foreground; }
 
 		// Set foreground color
 		Color * foreground(const ConsoleColor & foregroundColor);
 
 		// Get background color
-		inline ConsoleColor background() const { return _background; }
+		ConsoleColor background() const { return _background; }
 
 		// Set background color
 		Color * background(const ConsoleColor & backgroundColor);
@@ -107,13 +107,18 @@ namespace ConsoleEngine
 		std::string ToString(bool simple = false) const;
 
 		Color & operator=(const Color & c);
-		friend inline std::ostream & operator<<(std::ostream & os, const Color & c) { 
-			os << c.ToString(true); return os; 
+		friend std::ostream & operator<<(std::ostream & os, const Color & c)
+		{
+			os << c.ToString(true); return os;
 		}
-		friend inline bool operator==(const Color & c1, const Color & c2) { 
+		friend bool operator==(const Color & c1, const Color & c2)
+		{
 			return c1._foreground == c2._foreground && c1._background == c2._background;
 		}
-		friend inline bool operator!=(const Color & c1, const Color & c2) { return !operator==(c1, c2); }
+		friend bool operator!=(const Color & c1, const Color & c2)
+		{
+			return !operator==(c1, c2);
+		}
 
 	private:
 		// Text/foreground color

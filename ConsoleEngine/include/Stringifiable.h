@@ -28,8 +28,8 @@ namespace ConsoleEngine
     };
 
     // Adds ._ToString() method on children object
-    // Usage: derive a child from this class. Define a .ToString() 
-    //   method on child class, which returns _ToString(), where 
+    // Usage: derive a child from this class. Define a .ToString()
+    //   method on child class, which returns _ToString(), where
     //   params are an unlimited number of MAKE_OBJ_PARAM(variable)
     class CONSOLE_ENGINE_API _Stringifiable
     {
@@ -40,38 +40,44 @@ namespace ConsoleEngine
 
         // Combines all ObjParam arguments into one string
         template<typename T, typename... Args>
-        inline std::string _ToString(T t, Args... args) const {
+        std::string _ToString(T t, Args... args) const
+        {
             return t.ToString() + _Convert(args...);
         }
 
         template<typename T, typename... Args>
-        inline std::string _Convert(T t, Args... args) const {
+        std::string _Convert(T t, Args... args) const
+        {
             return t.ToString() + _Convert(args...);
         }
 
         template <typename T>
-        inline std::string _Convert(T t) const {
+        std::string _Convert(T t) const
+        {
             return t.ToString(false);
         }
 
         // Combines all ObjParam arguments into one string, but in a more minimalistic way
         template<typename T, typename... Args>
-        inline std::string _ToStringSimple(T t, Args... args) const {
+        std::string _ToStringSimple(T t, Args... args) const
+        {
             return t.value + ',' + _ConvertSimple(args...);
         }
 
         template<typename T, typename... Args>
-        inline std::string _ConvertSimple(T t, Args... args) const {
+        std::string _ConvertSimple(T t, Args... args) const
+        {
             return t.value + ',' + _ConvertSimple(args...);
         }
 
         template <typename T>
-        inline std::string _ConvertSimple(T t) const {
+        std::string _ConvertSimple(T t) const
+        {
             return t.value;
         }
 
         // Placeholder if custom .ToString() method is not defined on child object
-        inline virtual std::string ToString(bool simple = false) const { return "Custom .ToString() method is not defined"; };
+        virtual std::string ToString(bool simple = false) const { return "Custom .ToString() method is not defined"; };
     };
 }
 

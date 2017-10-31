@@ -14,7 +14,7 @@ using namespace ConsoleEngine;
 
 Display::Display()
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	cout << "Display created" << endl;
 	// TODO: Default constructor data initialization
@@ -23,13 +23,13 @@ Display::Display()
 	GetConsoleScreenBufferInfo(h, &_cBuffer);
 #endif
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
 Display::~Display()
 {
-	RunCallback(eBeforeDestruct);
-	RunCallback(eAfterDestruct);
+	RunCallback(evBeforeDestruct);
+	RunCallback(evAfterDestruct);
 }
 
 void Display::Size(const Size2 & s, bool showScrollbar)
@@ -58,14 +58,14 @@ void Display::Size(const Size2 & s, bool showScrollbar)
 
 	if (showScrollbar != _scrollbarVisible)
 	{
-		ScheduleRun(eChangeScrollbar);
+		ScheduleRun(evChangeScrollbar);
 	}
 
 	_size = s;
 	_scrollbarVisible = showScrollbar;
 
-	ScheduleRun(eChangeSize);
-	ScheduleRun(eChange);
+	ScheduleRun(evChangeSize);
+	ScheduleRun(evChange);
 }
 
 void Display::Color(const ConsoleEngine::Color & c)
@@ -120,8 +120,8 @@ void Display::Color(const ConsoleEngine::Color & c)
 #endif
 
 	_color = c;
-	ScheduleRun(eChangeColor);
-	ScheduleRun(eChange);
+	ScheduleRun(evChangeColor);
+	ScheduleRun(evChange);
 }
 
 Display * Display::_CycleEnd()

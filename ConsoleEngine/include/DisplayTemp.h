@@ -29,9 +29,20 @@ namespace ConsoleEngine
 		void Size(const Size2 & s, bool showScrollbar = true);
 		void Color(const Color & color);
 
-		inline bool IsScrollbarVisible() const { return _scrollbarVisible; }
-		inline ConsoleEngine::Size2 Size() const { return _size; }
-		inline ConsoleEngine::Color Color() const { return _color; }
+		bool IsScrollbarVisible() const
+		{
+			return _scrollbarVisible;
+		}
+
+		ConsoleEngine::Size2 Size() const
+		{
+			return _size;
+		}
+
+		ConsoleEngine::Color Color() const
+		{
+			return _color;
+		}
 
 		DisplayTemp * _CycleEnd();
 

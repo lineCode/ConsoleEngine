@@ -68,6 +68,7 @@ void _Utils::Crash(const std::string & reason)
 {
     //SetColor(Color(cLightRed, cBlack));
     cout << reason << endl;
+    cout << "Terminating..." << endl;
     //SetColor(Color(cLightGray, cBlack));
     exit(1);
 }

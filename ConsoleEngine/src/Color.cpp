@@ -73,40 +73,40 @@ const ConsoleColor Color::GetGrayscaleColor(const ConsoleColor & color)
 }
 
 // Constructs a new color with cLightGray foreground and cBlack background
-Color::Color() 
+Color::Color()
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	foreground(cLightGray)->background(cBlack);
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
 // Constructs a new color with same foreground and background values
 Color::Color(const ConsoleColor & color)
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	foreground(color)->background(color);
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
 
 // Constructs a new color with given foreground and background values
 Color::Color(const ConsoleColor & foregroundColor, const ConsoleColor & backgroundColor)
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	foreground(foregroundColor)->background(backgroundColor);
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
 Color::~Color() 
 {
-	RunCallback(eBeforeDestruct);
-	RunCallback(eAfterDestruct);
+	RunCallback(evBeforeDestruct);
+	RunCallback(evAfterDestruct);
 };
 
 // Set foreground and background values of an existing Color
@@ -135,8 +135,8 @@ Color * Color::foreground(const ConsoleColor & foregroundColor)
 	if (_foreground != foregroundColor)
 	{
 		_foreground = foregroundColor;
-		ScheduleRun(eChangeForeground);
-		ScheduleRun(eChange);
+		ScheduleRun(evChangeForeground);
+		ScheduleRun(evChange);
 	}
 
 	return this;
@@ -148,8 +148,8 @@ Color * Color::background(const ConsoleColor & backgroundColor)
 	if (_background != backgroundColor)
 	{
 		_background = backgroundColor;
-		ScheduleRun(eChangeBackground);
-		ScheduleRun(eChange);
+		ScheduleRun(evChangeBackground);
+		ScheduleRun(evChange);
 	}
 
 	return this;

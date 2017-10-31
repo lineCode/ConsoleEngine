@@ -13,20 +13,6 @@
 #define VAR_TYPE(var) typeid(var).name()
 #define MAKE_OBJ_PARAM(var) ObjParam({ VAR_NAME(var), _Utils::AnyToString(var), VAR_TYPE(var) })
 
-#define eBeforeConstruct "BeforeConstruct"
-#define eAfterConstruct "AfterConstruct"
-#define eBeforeDestruct "BeforeDestruct"
-#define eAfterDestruct "AfterDestruct"
-#define eChange "Change"
-#define eChangeVec2 "ChangeVec2"
-#define eChangeX "ChangeX"
-#define eChangeY "ChangeY"
-#define eChangeColor "ChangeColor"
-#define eChangeForeground "ChangeForeground"
-#define eChangeBackground "ChangeBackground"
-#define eChangeSize "ChangeSize"
-#define eChangeScrollbar "ChangeScrollbar"
-
 #if defined(_WIN32) && defined(CONSOLE_ENGINE_DLL)
     #ifdef CONSOLE_ENGINE_EXPORTS
         #define CONSOLE_ENGINE_API __declspec(dllexport)
@@ -34,7 +20,7 @@
         #define CONSOLE_ENGINE_API __declspec(dllimport)
     #endif
 #else
-	#define CONSOLE_ENGINE_API 
+	#define CONSOLE_ENGINE_API
 #endif
 
 #ifdef _WIN32

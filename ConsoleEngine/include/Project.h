@@ -24,20 +24,20 @@ namespace ConsoleEngine
 	public:
 		Project()
         {
-            RunCallback(eBeforeConstruct);
+            RunCallback(evBeforeConstruct);
 
             _display = ConsoleEngine::Display();
 
-            RunCallback(eAfterConstruct);
+            RunCallback(evAfterConstruct);
         }
 
         ~Project()
 		{
-			RunCallback(eBeforeDestruct);
-			RunCallback(eAfterDestruct);
+			RunCallback(evBeforeDestruct);
+			RunCallback(evAfterDestruct);
 		}
 
-        inline ConsoleEngine::Display * Display() { return &_display; }
+        ConsoleEngine::Display * Display() { return &_display; }
 
     private:
         ConsoleEngine::Display _display;

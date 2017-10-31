@@ -16,7 +16,7 @@ using namespace ConsoleEngine;
 
 DisplayTemp::DisplayTemp()
 {
-	RunCallback(eBeforeConstruct);
+	RunCallback(evBeforeConstruct);
 
 	// TODO: Default constructor data initialization
 #ifdef _WIN32
@@ -24,13 +24,13 @@ DisplayTemp::DisplayTemp()
 	GetConsoleScreenBufferInfo(h, &_cBuffer);
 #endif
 
-	RunCallback(eAfterConstruct);
+	RunCallback(evAfterConstruct);
 }
 
 DisplayTemp::~DisplayTemp()
 {
-	RunCallback(eBeforeDestruct);
-	RunCallback(eAfterDestruct);
+	RunCallback(evBeforeDestruct);
+	RunCallback(evAfterDestruct);
 }
 
 void DisplayTemp::Size(const Size2 & s, bool showScrollbar)
@@ -59,14 +59,14 @@ void DisplayTemp::Size(const Size2 & s, bool showScrollbar)
 
 	if (showScrollbar != _scrollbarVisible)
 	{
-		ScheduleRun(eChangeScrollbar);
+		ScheduleRun(evChangeScrollbar);
 	}
 
 	_size = s;
 	_scrollbarVisible = showScrollbar;
 
-	ScheduleRun(eChangeSize);
-	ScheduleRun(eChange);
+	ScheduleRun(evChangeSize);
+	ScheduleRun(evChange);
 }
 
 void DisplayTemp::Color(const ConsoleEngine::Color & c)
@@ -121,8 +121,8 @@ void DisplayTemp::Color(const ConsoleEngine::Color & c)
 #endif
 
 	_color = c;
-	ScheduleRun(eChangeColor);
-	ScheduleRun(eChange);
+	ScheduleRun(evChangeColor);
+	ScheduleRun(evChange);
 }
 
 DisplayTemp * DisplayTemp::_CycleEnd()

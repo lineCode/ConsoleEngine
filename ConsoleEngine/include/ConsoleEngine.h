@@ -8,8 +8,8 @@
 
 // Glossary:
 //   UD: Unity Docs
-//   class-binded events: Events that belong to all objects of the class
-//   object-binded events: Events that belong only to specific objects of the class
+//   class-bound events: Events that belong to all objects
+//   instance-bound events: Events that belong only to specific instance of the object
 #ifndef CONSOLE_ENGINE_MAIN_H
 #define CONSOLE_ENGINE_MAIN_H
 

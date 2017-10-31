@@ -18,30 +18,30 @@
 namespace ConsoleEngine
 {
     // Parent class for all interactive scene objects
-	class CONSOLE_ENGINE_API Object : private _Stringifiable, 
+	class CONSOLE_ENGINE_API Object : private _Stringifiable,
                                       public _EventController<Object>
 	{
 	public:
 		Object() {};
-        Object(std::vector<Object *> * objectsStack) 
-		{ 
-			RunCallback(eBeforeConstruct);
+        Object(std::vector<Object *> * objectsStack)
+		{
+			RunCallback(evBeforeConstruct);
 
 			// TODO: Actually make an ObjectsStack class with methods Add and Remove to handle this
 			_objectsStack = objectsStack;
 			_objectsStack->push_back(this);
 			objectsStackIndex = _objectsStack->size() - 1;
 
-			RunCallback(eAfterConstruct);
+			RunCallback(evAfterConstruct);
 		}
 
         ~Object()
 		{
-			RunCallback(eBeforeDestruct);
+			RunCallback(evBeforeDestruct);
 
 			_objectsStack->erase(_objectsStack->begin() + objectsStackIndex);
 
-			RunCallback(eAfterDestruct);		
+			RunCallback(evAfterDestruct);
 		};
 
     private:
