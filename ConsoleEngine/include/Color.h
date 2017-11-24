@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 //                                                            //
 //      Colors.h                                              //
-//      HaselLoyance 2017, Unlicensed                         //
+//      HaselLoyance 2017, Unlicense                          //
 //      https://github.com/HaselLoyance/ConsoleEngine         //
 //                                                            //
 ////////////////////////////////////////////////////////////////
@@ -69,6 +69,9 @@ namespace ConsoleEngine
 
 		// Returns grayscaled ConsoleColor
 		static const ConsoleColor GetGrayscaleColor(const ConsoleColor & color);
+
+		// Returns inverted ConsoleColor
+		static const ConsoleColor GetInvertedColor(const ConsoleColor & color);
 
 		// Constructs a new color with cLightGray foreground and cBlack background
 		Color();

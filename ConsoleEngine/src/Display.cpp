@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 //                                                            //
 //      Display.cpp                                           //
-//      HaselLoyance 2017, Unlicensed                         //
+//      HaselLoyance 2017, Unlicense                          //
 //      https://github.com/HaselLoyance/ConsoleEngine         //
 //                                                            //
 ////////////////////////////////////////////////////////////////
@@ -16,7 +16,6 @@ Display::Display()
 {
 	RunCallback(evBeforeConstruct);
 
-	cout << "Display created" << endl;
 	// TODO: Default constructor data initialization
 #ifdef _WIN32
 	h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -32,7 +31,7 @@ Display::~Display()
 	RunCallback(evAfterDestruct);
 }
 
-void Display::Size(const Size2 & s, bool showScrollbar)
+void Display::size(const Size2 & s, bool showScrollbar)
 {
 	int16_t width = round(s.width());
 	int16_t height = round(s.height());
@@ -68,7 +67,7 @@ void Display::Size(const Size2 & s, bool showScrollbar)
 	ScheduleRun(evChange);
 }
 
-void Display::Color(const ConsoleEngine::Color & c)
+void Display::color(const ConsoleEngine::Color & c)
 {
 #ifdef _WIN32
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);

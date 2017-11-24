@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 //                                                            //
 //      Object.h                                              //
-//      HaselLoyance 2017, Unlicensed                         //
+//      HaselLoyance 2017, Unlicense                          //
 //      https://github.com/HaselLoyance/ConsoleEngine         //
 //                                                            //
 ////////////////////////////////////////////////////////////////
@@ -9,9 +9,6 @@
 #ifndef CONSOLE_ENGINE_OBJECT_H
 #define CONSOLE_ENGINE_OBJECT_H
 
-#include <map>
-#include <vector>
-#include "Defines.h"
 #include "Stringifiable.h"
 #include "EventController.h"
 

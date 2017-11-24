@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 //                                                            //
 //      Display.h                                             //
-//      HaselLoyance 2017, Unlicensed                         //
+//      HaselLoyance 2017, Unlicense                          //
 //      https://github.com/HaselLoyance/ConsoleEngine         //
 //                                                            //
 ////////////////////////////////////////////////////////////////
@@ -26,22 +26,22 @@ namespace ConsoleEngine
 		Display();
 		~Display();
 
-		void Size(const Size2 & s, bool showScrollbar = true);
-		void Color(const Color & color);
+		void size(const Size2 & s, bool showScrollbar = true);
+		void color(const Color & color);
 
 		bool IsScrollbarVisible() const
 		{
-			return _scrollbarVisible;
+			return &_scrollbarVisible;
 		}
 
-		ConsoleEngine::Size2 Size() const
+		const Size2 * size() const
 		{
-			return _size;
+			return &_size;
 		}
 
-		ConsoleEngine::Color Color() const
+		const Color * color() const
 		{
-			return _color;
+			return &_color;
 		}
 
 		Display * _CycleEnd();

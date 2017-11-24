@@ -51,12 +51,13 @@ int main()
 	} */
 
 	Project p;
-	Project * pp = Project::Instance();
+	cout << Project::Instance()->display()->color()->ToString() << endl;
 
-	Display dtemp;
-	
 	Color c(cBlue, cYellow);
 	DisplayTemp d;
+
+	Project::Instance()->display()->color(c);
+	cout << Project::Instance()->display()->color()->ToString() << endl;
 
 	d.Size(Size2(100, 30), true);
 	d.Color(c);

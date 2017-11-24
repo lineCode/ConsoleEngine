@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 //                                                            //
 //      Singleton.h                                           //
-//      HaselLoyance 2017, Unlicensed                         //
+//      HaselLoyance 2017, Unlicense                          //
 //      https://github.com/HaselLoyance/ConsoleEngine         //
 //                                                            //
 ////////////////////////////////////////////////////////////////

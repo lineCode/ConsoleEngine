@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
 //                                                            //
 //      Project.h                                             //
-//      HaselLoyance 2017, Unlicensed                         //
+//      HaselLoyance 2017, Unlicense                          //
 //      https://github.com/HaselLoyance/ConsoleEngine         //
 //                                                            //
 ////////////////////////////////////////////////////////////////
@@ -9,7 +9,6 @@
 #ifndef CONSOLE_ENGINE_PROJECT_H
 #define CONSOLE_ENGINE_PROJECT_H
 
-#include "Defines.h"
 #include "Stringifiable.h"
 #include "Singleton.h"
 #include "EventController.h"
@@ -22,22 +21,10 @@ namespace ConsoleEngine
                                        public _EventController<Project>
 	{
 	public:
-		Project()
-        {
-            RunCallback(evBeforeConstruct);
+		Project();
+        ~Project();
 
-            _display = ConsoleEngine::Display();
-
-            RunCallback(evAfterConstruct);
-        }
-
-        ~Project()
-		{
-			RunCallback(evBeforeDestruct);
-			RunCallback(evAfterDestruct);
-		}
-
-        ConsoleEngine::Display * Display() { return &_display; }
+        ConsoleEngine::Display * display() { return &_display; }
 
     private:
         ConsoleEngine::Display _display;

@@ -72,6 +72,15 @@ const ConsoleColor Color::GetGrayscaleColor(const ConsoleColor & color)
 	}
 }
 
+// Returns inverted ConsoleColor
+const ConsoleColor Color::GetInvertedColor(const ConsoleColor & color)
+{
+	if (color == cTransparent)
+		return ConsoleColor::cTransparent;
+
+	return ConsoleColor(15 - color);
+}
+
 // Constructs a new color with cLightGray foreground and cBlack background
 Color::Color()
 {
